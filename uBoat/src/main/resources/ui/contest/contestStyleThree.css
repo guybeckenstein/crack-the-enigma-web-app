@@ -207,6 +207,50 @@
     -fx-border-width: 0px;
 }
 
+#decryptionManagerStatusHBox .table-view {
+    -fx-font-family: Arial;
+    -fx-background-color: #000000;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1px;
+    -fx-padding: 0;
+}
+
+#decryptionManagerStatusHBox .table-view .column-header-background .nested-column-header .table-column {
+    -fx-background-color: #15b0b9;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1px 1px 2px 1px;
+}
+
+#decryptionManagerStatusHBox .table-view .column-header-background .nested-column-header .table-column .label {
+    -fx-text-fill: #323232;
+    -fx-font-weight: Bold;
+}
+
+#decryptionManagerStatusHBox .table-view .column-header-background .show-hide-columns-button {
+    -fx-background-color: #15b0b9;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1px 1px 2px 1px;
+}
+
+#decryptionManagerStatusHBox .table-view .virtual-flow .scroll-bar:vertical .track-background {
+    -fx-background-color: #000000;
+    -fx-border-color: #cdcdcd;
+}
+
+#decryptionManagerStatusHBox .table-view .virtual-flow .scroll-bar:vertical .track-background {
+    -fx-background-color: #000000;
+    -fx-border-color: #cdcdcd;
+}
+
+#decryptionManagerStatusHBox .table-view .virtual-flow .scroll-bar:vertical .thumb {
+    -fx-background-color: #000000;
+    -fx-border-color: #cdcdcd;
+}
+
+#decryptionManagerStatusHBox .table-view .placeholder {
+    -fx-text-fill: #cdcdcd;
+}
+
 .scroll-pane .track {
     -fx-effect: none;
 }
