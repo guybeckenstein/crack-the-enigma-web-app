@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+<ScrollPane fx:id="mainScrollPane" cache="true" fitToHeight="true" fitToWidth="true" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MachineController">
+   <content>
+      <BorderPane fx:id="mainBorderPane" styleClass="grid-pane">
+         <top>
+            <HBox fx:id="topHBox" prefHeight="200.0" spacing="10.0" styleClass="status-vbox">
+               <children>
+                  <VBox alignment="CENTER" prefWidth="429.0" styleClass="status-vbox" HBox.hgrow="SOMETIMES">
+                     <children>
+                        <TilePane>
+                           <children>
+                              <FlowPane>
+                                 <children>
+                                    <Label id="currentMachineConfigurationStatusLabel" text="Current Machine Configuration Status">
+                                       <font>
+                                          <Font name="Arial Bold" size="24.0" />
+                                       </font>
+                                       <rotationAxis>
+                                          <Point3D />
+                                       </rotationAxis>
+                                    </Label>
+                                    <FlowPane styleClass="status-flow-pane">
+                                       <children>
+                                          <Label text="Number of Maximum Rotors Allowed in Machine:">
+                                             <font>
+                                                <Font name="Arial" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="maxRotorsInMachineLabel">
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets top="6.0" />
+                                       </padding>
+                                    </FlowPane>
+                                    <FlowPane styleClass="status-flow-pane">
+                                       <children>
+                                          <Label text="Current Amount of Used Machine Rotors:">
+                                             <font>
+                                                <Font name="Arial" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="currentUsedMachineRotorsLabel" />
+                                       </children>
+                                       <padding>
+                                          <Insets top="6.0" />
+                                       </padding>
+                                    </FlowPane>
+                                    <FlowPane styleClass="status-flow-pane">
+                                       <children>
+                                          <Label text="Number of Total Reflectors in XML File:">
+                                             <font>
+                                                <Font name="Arial" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="totalReflectorsInMachineLabel" />
+                                       </children>
+                                       <padding>
+                                          <Insets top="6.0" />
+                                       </padding>
+                                    </FlowPane>
+                                    <FlowPane styleClass="status-flow-pane">
+                                       <children>
+                                          <Label text="Current Selected Reflector in Machine:">
+                                             <font>
+                                                <Font name="Arial" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="currentSelectedMachineReflectorLabel" />
+                                       </children>
+                                       <padding>
+                                          <Insets top="6.0" />
+                                       </padding>
+                                    </FlowPane>
+                                 </children>
+                              </FlowPane>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </TilePane>
+                     </children>
+                     <padding>
+                        <Insets left="12.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </BorderPane.margin>
+            </HBox>
+         </top>
+         <center>
+            <VBox fx:id="configurationVBox" alignment="CENTER" spacing="8.0" styleClass="configuration-vbox" BorderPane.alignment="CENTER">
+               <children>
+                  <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" hgap="20.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label styleClass="header-label" text="Rotors And Order:" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <TextField fx:id="rotorsAndOrderTextField" maxWidth="166.0" minHeight="30.0" minWidth="166.0" prefHeight="30.0" prefWidth="166.0" promptText="Separated by ‘,’...">
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets bottom="3.0" left="4.0" top="1.0" />
+                                 </padding>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label styleClass="header-label" text="Rotors Starting Pos:" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <TextField fx:id="rotorsStartingPosTextField" maxWidth="166.0" minHeight="30.0" minWidth="166.0" prefHeight="30.0" prefWidth="166.0" promptText="No separation ‘,’...">
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets bottom="3.0" left="4.0" top="1.0" />
+                                 </padding>
+                              </TextField>
+                           </children>
+                        </VBox>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </FlowPane>
+                  <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" hgap="20.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label styleClass="header-label" text="Plug board pairs:" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <TextField fx:id="plugBoardPairsTextField" maxWidth="166.0" minHeight="30.0" minWidth="166.0" prefHeight="30.0" prefWidth="166.0" promptText="No separation ‘,’...">
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets bottom="3.0" left="4.0" top="1.0" />
+                                 </padding>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label styleClass="header-label" text="Reflector:" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <ChoiceBox fx:id="reflectorChoiceBox" maxWidth="166.0" minHeight="30.0" minWidth="166.0" prefHeight="30.0" prefWidth="166.0" stylesheets="@../main/generalStyleOne.css">
+                                 <VBox.margin>
+                                    <Insets top="1.0" />
+                                 </VBox.margin>
+                              </ChoiceBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </FlowPane>
+                  <TextFlow maxHeight="26.0" minHeight="26.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="setCodeLabel" alignment="TOP_LEFT" cache="true" maxHeight="1.7976931348623157E308" maxWidth="390.0" styleClass="info-label" textFill="GAINSBORO" wrapText="true">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </TextFlow>
+                  <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" hgap="30.0">
+                     <children>
+                        <Button id="generateRandomCodeButton" maxHeight="41.0" maxWidth="212.0" minHeight="41.0" minWidth="212.0" mnemonicParsing="false" onAction="#setConfigurationRandomly" prefHeight="41.0" prefWidth="212.0" text="Generate Random Code" textFill="GAINSBORO">
+                           <font>
+                              <Font name="Arial Bold" size="16.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="setCodeButton" maxHeight="41.0" maxWidth="106.0" minHeight="41.0" minWidth="106.0" mnemonicParsing="false" onAction="#getConfigurationFromUser" prefHeight="41.0" prefWidth="106.0" styleClass="setCodeButton" text="Set Code" textFill="#323232">
+                           <font>
+                              <Font name="Arial Bold" size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </FlowPane>
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+            </VBox>
+         </center>
+      </BorderPane>
+   </content>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <stylesheets>
+      <URL value="@machineStyleOne.css" />
+   </stylesheets>
+</ScrollPane>

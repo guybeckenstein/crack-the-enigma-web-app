@@ -1,0 +1,196 @@
+#main {
+    -fx-border-width: 6px;
+    -fx-border-color: #bf154b;
+}
+
+#keyboardInputVBox {
+    -fx-background-color: #c03049;
+}
+
+#keyboardInputVBox .machine-state-vbox .header-label {
+    -fx-text-fill: #323232;
+    -fx-font-size: 20px;
+}
+
+#keyboardInputVBox .information-label {
+    -fx-text-fill: #323232;
+    -fx-font-size: 14px;
+    -fx-font-style: Italic;
+}
+
+#keyboardInputVBox .button {
+    -fx-background-color: #25bfc5;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: Arial;
+    -fx-font-size: 16px;
+    -fx-font-weight: Bold;
+}
+
+#keyboardInputVBox .text-field {
+    -fx-font-size: 18px;
+    -fx-border-color: #505050;
+    -fx-border-width: 2px;
+}
+
+#activeTeamsDetailsVBox {
+    -fx-background-color: #ff5c78;
+}
+
+#activeTeamsDetailsVBox .table-view:row-selection .column-header-background .nested-column-header .table-column {
+    -fx-background-color: #e7aeb8;
+}
+
+#searchDictionaryWordsHBox {
+    -fx-background-color: #e6e6e6;
+}
+
+#searchDictionaryWordsHBox .label {
+    -fx-text-fill: #616161;
+    -fx-font-weight: Bold;
+}
+
+#searchDictionaryWordsHBox #statusHeader {
+    -fx-font-size: 24px;
+}
+
+#searchDictionaryWordsHBox .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(204, 204, 204, 1.0), 1, 100, 0, 0);
+}
+
+.header-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-font-weight: Bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 1, 0, 1, 1);
+}
+
+#contestTableView {
+    -fx-font-family: Arial;
+    -fx-background-color: #ffffff;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-padding: 0;
+}
+
+#contestTableView .column-header-background .nested-column-header .table-column {
+    -fx-background-color: #8d104c;
+    -fx-border-color: #000000;
+    -fx-border-width: 1px 1px 2px 1px;
+}
+
+#contestTableView .column-header-background .nested-column-header .table-column .label {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: Bold;
+}
+
+#contestTableView .column-header-background .show-hide-columns-button {
+    -fx-background-color: #8d104c;
+    -fx-border-color: #000000;
+    -fx-border-width: 1px 1px 2px 1px;
+}
+
+#contestTableView .virtual-flow .scroll-bar:vertical .track-background {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #323232;
+}
+
+#contestTableView .virtual-flow .scroll-bar:vertical .track-background {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #323232;
+}
+
+#contestTableView .virtual-flow .scroll-bar:vertical .thumb {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #323232;
+}
+
+#contestTableView .placeholder {
+    -fx-text-fill: #323232;
+}
+
+#contestButtonsVBox {
+    -fx-background-color: #b4306f;
+}
+
+#contestButtonsVBox .button {
+    -fx-background-color: #8d104c;
+    -fx-font-family: Arial;
+    -fx-font-size: 16px;
+    -fx-font-weight: Bold;
+    -fx-text-fill: #ffffff;
+}
+
+#contestButtonsVBox .button:hover, .chosen-button {
+    -fx-background-color: #25bfc5;
+}
+
+#contestButtonsVBox .button:hover {
+    -fx-background-color: #25bfc5;
+}.search-dictionary-words-vbox {
+     -fx-background-color: #ea4f46;
+ }
+
+#searchDictionaryWordsHBox .search-dictionary-words-vbox .button {
+    -fx-effect: none;
+    -fx-background-color: #e5a5a2;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+#searchDictionaryWordsHBox .search-dictionary-words-vbox .stack-button {
+    -fx-background-color: #ea4f46;
+    -fx-background-radius: 20 0 0 20;
+    -fx-border-width: 1px;
+    -fx-border-radius: 20 0 0 20;
+    -fx-border-color: #e5a5a2;
+}
+
+#searchDictionaryWordsHBox .search-dictionary-words-vbox .text-field {
+    -fx-background-color: transparent;
+    -fx-font-weight: Bold;
+    -fx-text-fill: #956f70;
+    -fx-padding: 0 0 0 -10;
+    -fx-prompt-text-fill: #956f70;
+}
+
+#searchDictionaryWordsHBox .search-dictionary-words-vbox #dictionaryScrollPane {
+    -fx-background-color: #f0f0f0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 1, 100, 0, 0);
+}
+
+#searchDictionaryWordsHBox .search-dictionary-words-vbox #dictionaryScrollPane .viewport {
+    -fx-background-color: #f0f0f0;
+}
+
+#searchDictionaryWordsHBox .search-dictionary-words-vbox #dictionaryScrollPane .list-view, .thumb {
+    -fx-background-color: #ffffff;
+    -fx-font-weight: Bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: #000000;
+}
+
+#searchDictionaryWordsHBox #searchDictionaryWordsHBox .search-dictionary-words-vbox #dictionaryScrollPane .track {
+    -fx-background-color: none;
+}
+
+#searchDictionaryWordsHBox .search-dictionary-words-vbox #dictionaryScrollPane .track-background {
+    -fx-background-color: #c4c4c4;
+}
+
+#searchDictionaryWordsHBox .list-view {
+    -fx-background-color: #f56949;
+}
+
+.scroll-pane .track {
+    -fx-effect: none;
+}
+
+.scroll-pane .thumb, .increment-button .increment-arrow, .decrement-button .decrement-arrow {
+    -fx-background-color: #323232;
+    -fx-effect: none;
+}
+
+.button {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 1, 100, 0, 0);
+}

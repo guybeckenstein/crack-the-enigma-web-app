@@ -2,6 +2,7 @@ package engine.enigmaEngine.impl;
 
 import engine.decryptionManager.WordsDictionary;
 import engine.dto.XmlDTO;
+import engine.dto.XmlToServletDTO;
 import engine.enigmaEngine.CreateAndValidateEnigmaComponentsImpl;
 import engine.enigmaEngine.exceptions.*;
 import engine.enigmaEngine.interfaces.*;
@@ -11,7 +12,6 @@ import javafx.util.Pair;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -31,9 +31,6 @@ public class InitializeEnigmaFromXML implements InitializeEnigma {
     private static CTEEnigma getSourceFromXML(String path) throws IOException, JAXBException {
         CTEEnigma xmlOutput;
 
-        if (!path.contains(".xml")) {
-            throw new FileNotFoundException("File given is not of XML type.");
-        }
         InputStream xmlFile = Files.newInputStream(Paths.get(path));
         JAXBContext jaxbContext = JAXBContext.newInstance("engine.enigmaEngine.schemaBinding");
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -144,7 +141,7 @@ public class InitializeEnigmaFromXML implements InitializeEnigma {
     }
 
     @Override
-    public XmlDTO getBriefXMLFromSource(String path, EnigmaEngine newEnigmaEngine) throws JAXBException, IOException, InvalidDecipherException {
+    public Pair<XmlDTO, XmlToServletDTO> getBriefXMLFromSource(String path, EnigmaEngine newEnigmaEngine) throws JAXBException, IOException, InvalidDecipherException, InvalidBattlefieldException {
         CTEEnigma xmlOutput = getSourceFromXML(path);
 
         CTEDecipher decipher = xmlOutput.getCTEDecipher();
@@ -154,32 +151,40 @@ public class InitializeEnigmaFromXML implements InitializeEnigma {
             throw new InvalidDecipherException("In the given XML, no dictionary is given.");
         }
 
-        CTEDictionary dictionary = decipher.getCTEDictionary();
-        newEnigmaEngine.setWordsDictionary(new WordsDictionary(dictionary.getWords(), dictionary.getExcludeChars()));
-
+        CTEBattlefield battlefield = xmlOutput.getCTEBattlefield();
+        if (battlefield == null) { // Battlefield
+            throw new InvalidBattlefieldException("In the given XML, no battlefield is given.");
+        } else if (battlefield.getAllies() < 0) {
+            throw new InvalidBattlefieldException("In the given XML, the amount of allies is invalid.");
+        } else if (battlefield.getBattleName().isEmpty()) {
+            throw new InvalidBattlefieldException("In the given XML, invalid battle-name title is given.");
+        } else if (battlefield.getLevel().isEmpty()) {
+            throw new InvalidBattlefieldException("In the given XML, invalid difficulty level is given.");
+        }
 
         // Ex1
         List<Integer> rotorsFromXML = xmlOutput.getCTEMachine().getCTERotors().getCTERotor()
                 .stream().map(CTERotor::getId).collect(Collectors.toList());
         List<String> reflectorsFromXML = xmlOutput.getCTEMachine().getCTEReflectors().getCTEReflector()
                 .stream().map(CTEReflector::getId).collect(Collectors.toList());
-        List<Character> ABCFromXML = xmlOutput.getCTEMachine()
+        Set<Character> ABCFromXML = xmlOutput.getCTEMachine()
                 .getABC().trim()
-                .chars().mapToObj(e -> (char) e).collect(Collectors.toList());
+                .chars().mapToObj(e -> (char) e).collect(Collectors.toCollection(TreeSet::new));
 
         Collections.sort(rotorsFromXML);
         Collections.sort(reflectorsFromXML);
-        Collections.sort(ABCFromXML);
         // Ex2
         String excludedCharacters = decipher.getCTEDictionary().getExcludeChars();
-        String nonSeparatedDictionaryWordsWithExcluded = decipher.getCTEDictionary().getWords().trim();
-        String nonSeparatedDictionaryWordsValid = nonSeparatedDictionaryWordsWithExcluded;
-        for (int i = 0; i < excludedCharacters.length(); i++) {
-            nonSeparatedDictionaryWordsValid = nonSeparatedDictionaryWordsWithExcluded.replace(excludedCharacters.substring(i, i + 1), "");
-        }
-        Set<String> dictionaryWords = new HashSet<>(Arrays.asList(nonSeparatedDictionaryWordsValid.split(" ")));
+        newEnigmaEngine.setWordsDictionary(new WordsDictionary(decipher.getCTEDictionary().getWords().trim(), decipher.getCTEDictionary().getExcludeChars()));
+        Set<String> dictionaryWords = new HashSet<>(newEnigmaEngine.getWordsDictionary().getWords());
 
+        // Ex3
+        int numAllies = battlefield.getAllies();
+        String difficulty = battlefield.getLevel();
+        String battlefieldTitle = battlefield.getBattleName();
+        XmlDTO xmlDTO = new XmlDTO(rotorsFromXML, reflectorsFromXML, excludedCharacters);
+        XmlToServletDTO xmlToServletDTO = new XmlToServletDTO(rotorsFromXML, reflectorsFromXML, ABCFromXML, dictionaryWords, numAllies, difficulty, battlefieldTitle);
 
-        return new XmlDTO(rotorsFromXML, reflectorsFromXML, ABCFromXML, dictionaryWords, excludedCharacters);
+        return new Pair<>(xmlDTO, xmlToServletDTO);
     }
 }

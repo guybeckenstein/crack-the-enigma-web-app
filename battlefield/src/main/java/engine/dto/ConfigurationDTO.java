@@ -11,7 +11,6 @@ public class ConfigurationDTO implements Serializable {
     private final List<Character> startingPositions;
     private Reflector.ReflectorID selectedReflectorID;
     private final List<Pair<Character, Character>> plugBoard;
-    private final int abcSize;
     private final String abc;
 
     public ConfigurationDTO(List<Integer> rotorsIDInorder, List<Character> startingPositions, Reflector.ReflectorID selectedReflectorID, List<Pair<Character, Character>> plugBoard, String abc) {
@@ -20,7 +19,6 @@ public class ConfigurationDTO implements Serializable {
         this.selectedReflectorID = selectedReflectorID;
         this.plugBoard = plugBoard;
         this.abc = abc;
-        abcSize = abc.length();
     }
 
     public List<Integer> getRotorsIDInorder() {
@@ -42,7 +40,7 @@ public class ConfigurationDTO implements Serializable {
         int i = startingPositions.size() - 1;
         while (i >= 0) {
             int index = abc.indexOf(startingPositions.get(i));
-            if (index == abcSize - 1) {
+            if (index == abc.length() - 1) {
                 startingPositions.set(i, abc.charAt(0));
                 i--;
             } else {
