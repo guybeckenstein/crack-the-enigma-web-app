@@ -1,0 +1,83 @@
+#mainGridPane {
+    -fx-background-color: #d13e58;
+}
+
+/* Battlefield Contest - Team Agents Data */
+#mainGridPane #teamAgentsData {
+    -fx-background-color: #882134;
+}
+
+#mainGridPane #teamAgentsData .header-label {
+    -fx-text-fill: #f0f0f0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 1, 0, 1, 1);
+    -fx-font-size: 24px;
+    -fx-font-family: Arial;
+    -fx-font-weight: Bold;
+    -fx-font-style: Italic;
+}
+
+#mainGridPane #teamAgentsData .table-view {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #000000;
+    -fx-border-width: 1px 1px 1px 1px;
+}
+
+#mainGridPane #teamAgentsData .table-column , .filler {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #dcdcdc;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-color: #bebebe;
+    -fx-spacing: 0;
+}
+
+#mainGridPane #teamAgentsData #errorLabel {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+}
+
+/* Battlefield Contest Data */
+#mainGridPane #contestDataVBox {
+    -fx-background-color: #c02e49;
+}
+
+#mainGridPane #contestDataVBox .header-label {
+    -fx-text-fill: #323232;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 1, 0, 1, 1);
+    -fx-font-size: 24px;
+    -fx-font-family: Arial;
+    -fx-font-weight: Bold;
+    -fx-font-style: Italic;
+}
+
+#mainGridPane #contestDataVBox .table-view {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2d86d0;
+    -fx-border-width: 1px 1px 1px 1px;
+}
+
+#mainGridPane #contestDataVBox .table-column , .filler {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #dcdcdc;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-color: #bebebe;
+    -fx-spacing: 0;
+}
+
+#mainGridPane #contestDataVBox .button {
+    -fx-background-color: #2d86d0;
+    -fx-border-color: #2d86d0;
+    -fx-text-fill: #f0f0f0;
+    -fx-font-size: 24px;
+    -fx-font-family: Arial;
+    -fx-font-weight: Bold;
+}
+
+#mainGridPane #contestDataVBox .button:hover {
+    -fx-background-color: #007fe5;
+    -fx-border-color: #0b6ebe;
+    -fx-text-fill: #ffffff;
+}

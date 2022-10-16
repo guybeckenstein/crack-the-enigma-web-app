@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fx:id="mainScrollPane" cache="true" fitToHeight="true" fitToWidth="true" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ContestController">
+<ScrollPane fx:id="mainScrollPane" cache="true" fitToHeight="true" fitToWidth="true" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersUBoat.ContestController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
@@ -153,7 +153,7 @@
                           <columns>
                             <TableColumn fx:id="alliesUsernameColumn" editable="false" prefWidth="100.0" text="Allies Username" />
                             <TableColumn fx:id="totalAgentsColumn" editable="false" prefWidth="88.0" text="Total Agents" />
-                              <TableColumn fx:id="missionSizeColumn" editable="false" prefWidth="88.0" text="Mission Size" />
+                              <TableColumn fx:id="taskSizeColumn" editable="false" prefWidth="88.0" text="Mission Size" />
                           </columns>
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

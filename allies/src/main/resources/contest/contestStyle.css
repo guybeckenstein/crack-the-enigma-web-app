@@ -1,0 +1,165 @@
+#mainGridPane {
+    -fx-background-color: #a73246;
+}
+
+/* Battlefield Contest Data */
+#mainGridPane #contestDataVBox {
+    -fx-background-color: #c02e49;
+}
+
+#mainGridPane #contestDataVBox .header-label {
+    -fx-text-fill: #323232;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 1, 0, 1, 1);
+    -fx-font-size: 24px;
+    -fx-font-family: Arial;
+    -fx-font-weight: Bold;
+    -fx-font-style: Italic;
+}
+
+#mainGridPane #contestDataVBox .table-view {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2d86d0;
+    -fx-border-width: 1px 1px 1px 1px;
+}
+
+#mainGridPane #contestDataVBox .table-column , .filler {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #dcdcdc;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-color: #bebebe;
+    -fx-spacing: 0;
+}
+
+#mainGridPane #contestDataVBox .button {
+    -fx-background-color: #2d86d0;
+    -fx-border-color: #2d86d0;
+    -fx-text-fill: #f0f0f0;
+    -fx-font-size: 24px;
+    -fx-font-family: Arial;
+    -fx-font-weight: Bold;
+}
+
+#mainGridPane #contestDataVBox .button:hover {
+    -fx-background-color: #007fe5;
+    -fx-border-color: #0b6ebe;
+    -fx-text-fill: #ffffff;
+}
+
+#mainGridPane #contestDataVBox .text-field {
+    -fx-font-size: 16px;
+    -fx-border-color: #000000;
+}
+
+/* Battlefield Contest - Contest Allies */
+#mainGridPane #alliesDataVBox {
+    -fx-background-color: #882134;
+}
+
+#mainGridPane #alliesDataVBox .header-label {
+    -fx-text-fill: #f0f0f0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 1, 0, 1, 1);
+    -fx-font-size: 24px;
+    -fx-font-family: Arial;
+    -fx-font-weight: Bold;
+    -fx-font-style: Italic;
+}
+
+#mainGridPane #alliesDataVBox .table-view {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #000000;
+    -fx-border-width: 1px 1px 1px 1px;
+}
+
+#mainGridPane #alliesDataVBox .table-column , .filler {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #dcdcdc;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-color: #bebebe;
+    -fx-spacing: 0;
+}
+
+/* Team's Agents Progress Data & Total Progress */
+#mainGridPane #progressDataVBox {
+    -fx-background-color: #d1433e;
+}
+
+#mainGridPane #progressDataVBox .header-label {
+    -fx-text-fill: #323232;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 1, 0, 1, 1);
+    -fx-font-size: 22px;
+    -fx-font-family: Arial;
+    -fx-font-weight: Bold;
+    -fx-font-style: Italic;
+}
+
+
+
+#mainGridPane #progressDataVBox .table-view {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #000000;
+    -fx-border-width: 1px 1px 1px 1px;
+}
+
+#mainGridPane #progressDataVBox .table-column , .filler {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #dcdcdc;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-color: #bebebe;
+    -fx-spacing: 0;
+}
+
+#mainGridPane #progressDataVBox .dm-progress-hbox .label {
+    -fx-text-fill: #323232;
+    -fx-font-size: 14px;
+    -fx-font-family: Arial;
+}
+
+/* Team's Candidates */
+#mainGridPane #teamsCandidatesVBox {
+    -fx-background-color: #d13e58;
+}
+
+#mainGridPane #teamsCandidatesVBox .header-label {
+    -fx-text-fill: #323232;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 1, 0, 1, 1);
+    -fx-font-size: 22px;
+    -fx-font-family: Arial;
+    -fx-font-weight: Bold;
+    -fx-font-style: Italic;
+}
+
+#mainGridPane #teamsCandidatesVBox #encryptedMessageHBox {
+    -fx-text-fill: #323232;
+    -fx-font-family: Arial;
+}
+
+#mainGridPane #teamsCandidatesVBox #encryptedMessageHBox #encryptedMessage {
+    -fx-font-size: 14px;
+    -fx-font-weight: Bold;
+}
+#mainGridPane #teamsCandidatesVBox #encryptedMessageHBox .text-field {
+    -fx-font-size: 16px;
+    -fx-border-color: #000000;
+}
+
+#mainGridPane #teamsCandidatesVBox .table-view {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #000000;
+    -fx-border-width: 1px 1px 1px 1px;
+}
+
+#mainGridPane #teamsCandidatesVBox .table-column , .filler {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #dcdcdc;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-border-color: #bebebe;
+    -fx-spacing: 0;
+}

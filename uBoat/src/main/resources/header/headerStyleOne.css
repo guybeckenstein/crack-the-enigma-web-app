@@ -28,11 +28,6 @@
     -fx-font-weight: Bold;
 }
 
-.screen-button:hover {
-    -fx-background-color:  #fbc2c2;
-    -fx-border-color: #ff7676;
-}
-
 .chosen-button {
     -fx-background-color:  #fbc2c2;
     -fx-border-color: #ff7676;

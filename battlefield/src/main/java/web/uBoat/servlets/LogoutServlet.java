@@ -3,8 +3,8 @@ package web.uBoat.servlets;
 import engine.users.UserManager;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import web.uBoat.http.ServletUtils;
-import web.uBoat.http.SessionUtils;
+import web.http.ServletUtils;
+import web.http.SessionUtils;
 
 import java.io.IOException;
 

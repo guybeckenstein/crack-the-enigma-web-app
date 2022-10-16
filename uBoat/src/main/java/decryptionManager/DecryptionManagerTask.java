@@ -1,6 +1,6 @@
 package decryptionManager;
 
-import controllers.ContestController;
+import controllersUBoat.ContestController;
 import decryptionManager.agent.AgentThreadFactory;
 import decryptionManager.producer.BlockingProducer;
 import decryptionManager.threadPool.AgentTask;

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane cache="true" fitToHeight="true" fitToWidth="true" prefHeight="500.0" prefWidth="900.0" stylesheets="@loginStyleOne.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<ScrollPane cache="true" fitToHeight="true" fitToWidth="true" prefHeight="500.0" prefWidth="900.0" stylesheets="@loginStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersAllies.LoginController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
