@@ -25,6 +25,7 @@ public class MachineConfigurationServlet extends HttpServlet {
         try {
             configuration = java.net.URLDecoder.decode(configuration, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
+            System.out.println("ERROR: UnsupportedEncodingException thrown!");
         }
 
         if (configuration != null && !configuration.isEmpty()) {

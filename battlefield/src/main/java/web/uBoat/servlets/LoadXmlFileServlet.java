@@ -17,7 +17,7 @@ import java.util.Properties;
 public class LoadXmlFileServlet extends HttpServlet {
     private final String TITLE_PARAMETER = "title";
     private final String USERNAME_PARAMETER = "username";
-    private StringBuffer stringBuffer;
+    private final StringBuffer stringBuffer;
 
     public LoadXmlFileServlet() {
         stringBuffer = null;
