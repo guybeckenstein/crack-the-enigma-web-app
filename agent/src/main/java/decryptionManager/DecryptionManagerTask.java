@@ -42,7 +42,6 @@ public class DecryptionManagerTask extends Task<Boolean> {
     private Instant taskStart;
     private Instant taskEnd;
     private final AtomicLong iterations;
-    private final Object currentTasksLock;
     private final Object candidatesLock;
     private boolean stopDM;
     // Send information
@@ -68,7 +67,6 @@ public class DecryptionManagerTask extends Task<Boolean> {
         currentTasksInThreadPool = new ConcurrentLinkedQueue<>();
 
         iterations = new AtomicLong(1);
-        currentTasksLock = new Object();
         candidatesLock = new Object();
         stopDM = false;
 
@@ -112,7 +110,7 @@ public class DecryptionManagerTask extends Task<Boolean> {
         List<Pair<Candidate, Double>> candidatesPairs = new CopyOnWriteArrayList<>();
 
         Timer getBlockingQueueTimer = new Timer(true);
-        GetBlockingQueueTimerTask getBlockingQueueTimerTask = new GetBlockingQueueTimerTask(this, currentTasksLock);
+        GetBlockingQueueTimerTask getBlockingQueueTimerTask = new GetBlockingQueueTimerTask(this);
         getBlockingQueueTimer.scheduleAtFixedRate(getBlockingQueueTimerTask, 0, 500);
         try {
             Thread.sleep(500);
@@ -126,10 +124,8 @@ public class DecryptionManagerTask extends Task<Boolean> {
         while (!stopDM) {
             try {
                 ConfigurationDTO currentTask = null;
-                synchronized (currentTasksLock) {
-                    if (currentTasksInThreadPool.size() > 0) {
-                        currentTask = currentTasksInThreadPool.remove();
-                    }
+                if (currentTasksInThreadPool.size() > 0) {
+                    currentTask = currentTasksInThreadPool.remove();
                 }
                 if (currentTask != null) {
                     final ConfigurationDTO startingConfiguration = currentTask;

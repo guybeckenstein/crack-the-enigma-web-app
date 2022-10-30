@@ -2,6 +2,7 @@ C:\Users\guybe\IdeaProjects\maven-tomcat\allies\src\main\java\timerTasks\dashboa
 C:\Users\guybe\IdeaProjects\maven-tomcat\allies\src\main\java\controllersAllies\ContestController.java
 C:\Users\guybe\IdeaProjects\maven-tomcat\allies\src\main\java\timerTasks\contest\pre\BattlefieldContestDataTimerTask.java
 C:\Users\guybe\IdeaProjects\maven-tomcat\allies\src\main\java\timerTasks\contest\start\ContestFinishedTimerTask.java
+C:\Users\guybe\IdeaProjects\maven-tomcat\allies\src\main\java\timerTasks\contest\IsUBoatQuitsTimerTask.java
 C:\Users\guybe\IdeaProjects\maven-tomcat\allies\src\main\java\timerTasks\contest\pre\ContestAlliesTimerTask.java
 C:\Users\guybe\IdeaProjects\maven-tomcat\allies\src\main\java\timerTasks\dashboard\ContestsTimerTask.java
 C:\Users\guybe\IdeaProjects\maven-tomcat\allies\src\main\java\controllersAllies\AppController.java

@@ -44,7 +44,7 @@ public class EnigmaEngineAndXmlManager {
         uBoatEnigmaEngineMap.remove(username);
     }
 
-    public synchronized EnigmaEngine getEnigmaEngine(String username) {
+    public EnigmaEngine getEnigmaEngine(String username) {
         return Collections.unmodifiableMap(uBoatEnigmaEngineMap).get(username);
     }
 
@@ -62,7 +62,7 @@ public class EnigmaEngineAndXmlManager {
         uBoatXmlMap.remove(username);
     }
 
-    public synchronized XmlToServletDTO getXmlInformation(String username) {
+    public XmlToServletDTO getXmlInformation(String username) {
         return Collections.unmodifiableMap(uBoatXmlMap).get(username);
     }
 

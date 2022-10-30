@@ -52,11 +52,11 @@ public class RemoveAlliesServlet extends HttpServlet {
                 AlliesServletUtils.getContestManagerMap(getServletContext()).removeAllies(alliesUsername);
                 // Removes Allies' encryption map item
                 AlliesServletUtils.getEncryptionMessageManagerMap(getServletContext()).removeEncryptionMessage(alliesUsername);
-                // Remove Allies' from ready map
+                // Remove Allies' from battlefield map
                 String uBoatUsername = UBoatServletUtils.getBattlefieldManager(getServletContext()).getUBoatUsername(alliesUsername);
                 UBoatServletUtils.getReadyManager(getServletContext()).removeAlliesFromBattlefield(uBoatUsername, alliesUsername);
-
-
+                // Remove Allies' from ready set
+                AgentServletUtils.getAlliesReadySetManager(getServletContext()).removeAllies(alliesUsername);
             } else {
                 String message = "ERROR: Invalid " + alliesUsername + "'s isLogout value!";
                 System.out.println(message);

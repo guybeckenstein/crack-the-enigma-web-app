@@ -19,22 +19,17 @@ public class GetBlockingQueueTimerTask extends TimerTask {
     private final Gson deserializer;
     private final Type type;
     private final DecryptionManagerTask dmTask;
-    private final Object currentTasksLock;
 
-    public GetBlockingQueueTimerTask(DecryptionManagerTask dmTask, Object currentTasksLock) {
+    public GetBlockingQueueTimerTask(DecryptionManagerTask dmTask) {
         super();
         deserializer = new Gson();
         type = new TypeToken<Queue<ConfigurationDTO>>(){}.getType();
         this.dmTask = dmTask;
-        this.currentTasksLock = currentTasksLock;
     }
 
     @Override
     public void run() {
-        int tasksInThreadPoolSize;
-        synchronized (currentTasksLock) {
-            tasksInThreadPoolSize = dmTask.getCurrentTasksInThreadPool().size();
-        }
+        int tasksInThreadPoolSize = dmTask.getCurrentTasksInThreadPool().size();
         if (tasksInThreadPoolSize == 0) {
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
@@ -65,10 +60,7 @@ public class GetBlockingQueueTimerTask extends TimerTask {
                             String tasksAsJson = Objects.requireNonNull(body).string();
                             if (!tasksAsJson.equals("the-end")) {
                                 Queue<ConfigurationDTO> currentTasks = deserializer.fromJson(tasksAsJson, type);
-                                synchronized (currentTasksLock) {
-                                    dmTask.getCurrentTasksInThreadPool().addAll(currentTasks);
-                                }
-
+                                dmTask.getCurrentTasksInThreadPool().addAll(currentTasks);
                                 dmTask.updateContestScreen(currentTasks.size());
                             } else {
                                 dmTask.setStopDM(true);

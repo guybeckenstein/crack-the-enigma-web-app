@@ -31,7 +31,11 @@ public class StartPrimaryStage { // Relevant only for 'start' method of each App
                 Platform.exit();
                 System.exit(0);
             });
-        } catch (LoadException | NullPointerException e) {
+        } catch (LoadException e) {
+            System.out.println("Load exception");
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.out.println("Null exception");
             e.printStackTrace();
         }
     }

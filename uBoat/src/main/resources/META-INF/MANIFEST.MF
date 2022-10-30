@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Main-Class: UBoatMain
+Class-Path: kotlin-stdlib-jdk8-1.5.31.jar kotlin-stdlib-common-1.5.31.ja
+ r byte-buddy-1.12.10.jar spring-beans-5.3.23.jar kotlin-stdlib-jdk7-1.5
+ .31.jar okio-jvm-3.0.0.jar spring-jcl-5.3.23.jar okhttp-4.10.0.jar anno
+ tations-13.0.jar spring-core-5.3.23.jar kotlin-stdlib-1.6.20.jar gson-2
+ .10.jar spring-web-5.3.23.jar assertj-core-3.23.1.jar
+

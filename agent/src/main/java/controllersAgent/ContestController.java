@@ -204,8 +204,7 @@ public class ContestController {
     private void initializeContest(int taskSize, EnigmaEngineImpl enigmaEngine, String encryptionInput) {
         dmTask = new DecryptionManagerTask(this, encryptedMessageTextField.getText(),
                 totalThreads, taskSize, tasksWithdrawalSize, enigmaEngine, agentUsername, alliesUsername, encryptionInput);
-        Thread dmTaskThread = new Thread(dmTask, agentUsername);
-        dmTaskThread.start();
+        new Thread(dmTask, agentUsername).start();
 
         contestFinishedTimer = new Timer(true);
         ContestFinishedTimerTask contestFinishedTimerTask = new ContestFinishedTimerTask(this);

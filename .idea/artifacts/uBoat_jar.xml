@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact name="uBoat:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/uBoat_jar</output-path>
+    <root id="root">
+      <element id="archive" name="uBoat.jar">
+        <element id="module-output" name="uBoat" />
+        <element id="module-output" name="engine" />
+      </element>
+      <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31" />
+      <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31" />
+      <element id="library" level="project" name="Maven: net.bytebuddy:byte-buddy:1.12.10" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.3.23" />
+      <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31" />
+      <element id="library" level="project" name="Maven: com.squareup.okio:okio-jvm:3.0.0" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.3.23" />
+      <element id="library" level="project" name="Maven: com.squareup.okhttp3:okhttp:4.10.0" />
+      <element id="library" level="project" name="Maven: org.jetbrains:annotations:13.0" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-core:5.3.23" />
+      <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.6.20" />
+      <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.10" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-web:5.3.23" />
+      <element id="library" level="project" name="Maven: org.assertj:assertj-core:3.23.1" />
+    </root>
+  </artifact>
+</component>

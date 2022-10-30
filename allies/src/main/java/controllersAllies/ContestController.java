@@ -461,6 +461,7 @@ public class ContestController {
     }
 
     private void initializeTimerTasks() {
+        System.out.println(getUsername() + " initializes TimerTasks for contest");
         initializeUpdateTasksProgressTimerTask();
         initializePullInformationTimerTask();
         initializeContestFinishedTimerTask();

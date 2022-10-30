@@ -5,10 +5,10 @@ import jar.dto.ConfigurationDTO;
 import jar.enigmaEngine.interfaces.EnigmaEngine;
 import web.allies.blockingQueue.ServerBlockingQueue;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.IntStream;
 
@@ -16,12 +16,12 @@ public class BlockingQueueManager {
     private final Map<String, ServerBlockingQueue> serverBlockingQueueMap; // Map<Allies' username, Unique DM blocking queue (producer)>
     private final Object blockingProducerLock;
     public BlockingQueueManager() {
-        serverBlockingQueueMap = new HashMap<>();
+        serverBlockingQueueMap = new ConcurrentHashMap<>();
         blockingProducerLock = new Object();
     }
 
     /** When starting contest **/
-    public synchronized void createBlockingQueue(String username, long totalTasks, int taskSize,
+    public void createBlockingQueue(String username, long totalTasks, int taskSize,
                                                  Difficulty difficulty, int reflectorsAmount, int rotorsAmount, EnigmaEngine engine) {
         ServerBlockingQueue serverBlockingQueue = new ServerBlockingQueue(totalTasks, taskSize,
                 difficulty, reflectorsAmount, rotorsAmount, engine.getConfigurationDTO());

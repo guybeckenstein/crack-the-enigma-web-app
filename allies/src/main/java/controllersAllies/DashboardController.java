@@ -34,10 +34,6 @@ public class DashboardController {
 
     @FXML private TableColumn<TeamsAgentsData, String> tasksCapacityTableColumn;
     private Timer myAgentsTimer;
-    // Add agent
-    @FXML private TextField usernameTextField;
-    @FXML private ComboBox<Integer> totalThreadsComboBox;
-    @FXML private Slider tasksWithdrawalSizeSlider;
     // Error
     @FXML private Label errorMessageLabel;
     private final SimpleStringProperty errorMessageProperty;
@@ -211,17 +207,5 @@ public class DashboardController {
         battlefieldContestDataTableView.getItems().clear();
         battlefieldContestDataTableView.getItems().addAll(newBattlefields);
         battlefieldContestDataTableView.getSelectionModel().select(selectedItem);
-    }
-
-    @FXML
-    void addAgentAction() {
-        if (usernameTextField.getText().isEmpty()) {
-            errorMessageProperty.set("ERROR: No username has been inserted!");
-        } else if (totalThreadsComboBox.getValue() == null) {
-            errorMessageProperty.set("ERROR: You must choose amount of available threads!");
-        } else {
-            ProcessBuilder processBuilder = new ProcessBuilder();
-
-        }
     }
 }
