@@ -9,12 +9,14 @@
         <module name="agent" />
         <module name="allies" />
         <module name="uBoat" />
+        <module name="engine" />
         <module name="battlefield" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="common" target="1.8" />
       <module name="crack-the-enigma-v2" target="1.8" />
+      <module name="http" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

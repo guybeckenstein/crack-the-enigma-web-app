@@ -1,0 +1,69 @@
+.grid-pane {
+    -fx-background-color: #d13e58;
+}
+
+/* Status bar section */
+.status-vbox {
+    -fx-background-color: #f6f6f6;
+}
+
+.status-vbox #currentMachineConfigurationStatusLabel {
+    -fx-text-fill: #323232;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 1, 0, 1, 1);
+    -fx-font-size: 24px;
+    -fx-font-weight: Bold;
+}
+
+.status-vbox .status-flow-pane {
+    -fx-text-fill: #323232;
+    -fx-font-size: 16px;
+    -fx-hgap: 6px;
+}
+
+/* Configuration bar section */
+.configuration-vbox {
+    -fx-background-color: #c02e49;
+    -fx-border-color: #007fe3;
+    -fx-border-width: 12px;
+    -fx-font-family: Arial;
+    -fx-font-size: 18px;
+}
+
+.configuration-vbox .header-label {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 1, 0, 1, 1);
+    -fx-text-fill: #ffffff;
+}
+
+.configuration-vbox .text-field , .choice-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #505050;
+    -fx-border-width: 2px;
+    -fx-text-overrun: ELLIPSIS;
+    -fx-text-fill: #505050;
+}
+
+.configuration-vbox .choice-box .label {
+    -fx-row-valignment: CENTER;
+}
+
+.configuration-vbox .button {
+    -fx-background-color: #007fe3;
+    -fx-text-fill: #d5d5d5;
+}
+
+.configuration-vbox .button:hover {
+    -fx-background-color: #008dff;
+    -fx-border-color: #055fa4;
+    -fx-text-fill: #e7e7e7;
+}
+
+.configuration-vbox #configurationLabel {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0), 1, 0, 1, 1);
+    -fx-font-size: 12px;
+    -fx-text-fill: #000000;
+}
+
+.button {
+    -fx-font-size: 16px;
+    -fx-font-weight: Bold;
+}

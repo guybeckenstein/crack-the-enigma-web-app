@@ -1,4 +1,4 @@
-import common.StartPrimaryStage;
+import jar.common.StartPrimaryStage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -13,7 +13,7 @@ public class AgentMain extends Application {
     }
 
     public static void main(String[] args) {
-        Thread.currentThread().setName("agent/main");
+        Thread.currentThread().setName("jar/clients/agent/main");
         Application.launch(args);
     }
 }

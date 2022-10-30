@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+<!--suppress ALL -->
+<ScrollPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersUBoat.todo.ConfigurationController">
+   <content>
+      <VBox alignment="CENTER_LEFT" prefWidth="352.0" spacing="8.0" styleClass="configuration-vbox">
+         <children>
+            <Label text="Enter Rotors And Their Inner Order" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+            </Label>
+            <TableView fx:id="rotorsAndTheirOrderTableView" editable="true" prefHeight="100.0" prefWidth="352.0">
+              <columns>
+                <TableColumn prefWidth="75.0" sortable="false" text="2" />
+                <TableColumn prefWidth="75.0" sortable="false" text="1" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+               <children>
+                  <VBox spacing="4.0">
+                     <children>
+                        <Label styleClass="header-label" text="Reflector:" textFill="#323232" wrapText="true">
+                           <font>
+                              <Font name="Arial Bold Italic" size="18.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </Label>
+                        <ChoiceBox fx:id="reflectorChoiceBox" maxWidth="166.0" minHeight="30.0" minWidth="166.0" prefHeight="30.0" prefWidth="166.0" style="-fx-background-color: #f0f0f0; -fx-border-color: #323232; -fx-border-width: 2px;">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </ChoiceBox>
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#addRotorColumnAction" style="-fx-background-color: #323232; -fx-border-color: #f0f0f0; -fx-border-width: 2px; -fx-text-fill: #f0f0f0;" text="+">
+                     <font>
+                        <Font name="Arial Bold" size="24.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#removeSelectedRotorColumnAction" style="-fx-background-color: #323232; -fx-border-color: #f0f0f0; -fx-border-width: 2px; -fx-text-fill: #f0f0f0;" text="-">
+                     <font>
+                        <Font name="Arial Bold" size="24.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <TextFlow maxHeight="26.0" minHeight="26.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label alignment="TOP_LEFT" cache="true" maxHeight="1.7976931348623157E308" maxWidth="356.0" styleClass="info-label" textFill="GAINSBORO" wrapText="true">
+                     <font>
+                        <Font name="Arial" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TextFlow>
+            <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" hgap="30.0" VBox.vgrow="NEVER">
+               <children>
+                  <Button id="generateRandomCodeButton" maxHeight="41.0" maxWidth="212.0" minHeight="41.0" minWidth="212.0" mnemonicParsing="false" onAction="#setConfigurationRandomly" prefHeight="41.0" prefWidth="212.0" text="Generate Random Code" textFill="#323232" wrapText="true">
+                     <font>
+                        <Font name="Arial Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="setCodeButton" maxHeight="41.0" maxWidth="106.0" minHeight="41.0" minWidth="106.0" mnemonicParsing="false" onAction="#getConfigurationFromUser" prefHeight="41.0" prefWidth="106.0" styleClass="setCodeButton" text="Set Code" textFill="#323232" wrapText="true">
+                     <font>
+                        <Font name="Arial Bold" size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </FlowPane>
+         </children>
+         <padding>
+            <Insets bottom="10.0" />
+         </padding>
+      </VBox>
+   </content>
+</ScrollPane>

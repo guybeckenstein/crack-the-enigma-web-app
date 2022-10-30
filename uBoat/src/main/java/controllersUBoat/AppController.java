@@ -1,10 +1,10 @@
 package controllersUBoat;
 
 import impl.models.MainModel;
+import interfaces.Input;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,10 +12,10 @@ import java.util.Set;
 
 public class AppController {
     // Main component
-    static private MainModel mainModelApp;
+    static private Input mainModelApp;
     @FXML private BorderPane mainBorderPane; // For stylesheet purposes
     // Sub components
-    @FXML private HBox headerComponent;
+    @FXML private ScrollPane loginComponent;
     @FXML private ScrollPane machineComponent;
     @FXML private ScrollPane contestComponent;
     @SuppressWarnings({"UnusedDeclaration"}) @FXML private LoginController loginComponentController;
@@ -36,22 +36,14 @@ public class AppController {
             machineComponentController.setMainController(this);
             contestComponentController.setMainController(this);
         }
-        headerComponent.setMouseTransparent(true);
     }
 
-    public static MainModel getModelMain() {
+    public static Input getModelMain() {
         return mainModelApp;
-    }
-
-    public void updateMachineStateAndDictionary(String currentMachineState) {
-        contestComponentController.updateMachineStateAndDictionary(currentMachineState);
     }
 
     public void reset() {
         machineComponentController.reset();
-    }
-    public void resetScreens(boolean bool, Object controller) {
-        contestComponentController.resetMachineStateAndEnigmaOutput(bool, controller);
     }
     public void updateMachineScreen(List<String> choiceBoxItems, String numberOfRotors, String numberOfReflectors) {
         machineComponentController.updateScreen(choiceBoxItems, numberOfRotors, numberOfReflectors);
@@ -60,18 +52,19 @@ public class AppController {
         contestComponentController.initializeMachineStates(machineStateConsoleString);
     }
 
-    public void updateLabelTextsToEmpty() {
-        headerComponentController.updateLabelTextsToEmpty();
-        machineComponentController.updateLabelTextsToEmpty();
-        contestComponentController.updateLabelTextsToEmpty();
+    public void emptyLabelText() {
+        headerComponentController.emptyLabelText();
+        machineComponentController.emptyDetailsLabelText();
     }
 
     public void updateDictionary() {
         contestComponentController.updateDictionary();
     }
-    public void changeToContestScreen() {
+    public void switchToContestScreen() {
         contestComponent.toFront();
-        headerComponentController.changeToContestScreen();
+        contestComponentController.initializeContestScreen();
+        headerComponentController.switchToContestScreen();
+        headerComponentController.setLoadButtonMouseTransparency(true);
     }
 
 
@@ -96,12 +89,20 @@ public class AppController {
     public void updateUBoatUsername(String username) {
         headerComponentController.updateUsername(username);
     }
+    public String getUBoatUsername() {
+        return headerComponentController.getUsername();}
     public void switchToMachineScreen() {
         machineComponent.toFront();
-        headerComponentController.enableScreen();
+        machineComponentController.reset();
+        headerComponentController.setLoadButtonMouseTransparency(false);
     }
 
-    public HBox getHeaderComponent() {
-        return headerComponent;
+    // When UBoat quits
+    public void switchToLoginScreen() {
+        // Reset header
+        headerComponentController.switchToLoginScreen();
+        // Reset login screen
+        loginComponent.toFront();
+        loginComponentController.reset();
     }
 }

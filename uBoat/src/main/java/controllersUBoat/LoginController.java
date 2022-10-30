@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Objects;
 
-import static web.http.Configuration.BASE_URL;
-import static web.http.Configuration.HTTP_CLIENT;
+import static http.Base.BASE_URL;
+import static http.Base.HTTP_CLIENT;
 
 public class LoginController {
 
@@ -39,18 +39,24 @@ public class LoginController {
         errorMessageLabel.textProperty().bind(errorMessageProperty);
     }
     @FXML
-    @SuppressWarnings("SpellCheckingInspection")
     void loginAction() {
         if (usernameProperty.get().isEmpty()) {
             errorMessageProperty.set("ERROR: No username has been inserted!");
         } else {
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create("{\n\t\"first_param\":\"xxxxxx\"}", mediaType);
+            String RESOURCE = "/username";
+            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(BASE_URL + RESOURCE)).newBuilder();
+            urlBuilder.addQueryParameter("username", usernameProperty.get());
+            urlBuilder.addQueryParameter("type", "UBoat");
+            String finalUrl = urlBuilder.build().toString();
+
+            MediaType mediaType = MediaType.parse("text/plain");
+            RequestBody body = RequestBody.create("", mediaType);
+
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/uboat/username?username=" + usernameProperty.get())
-                    .put(body)
-                    .addHeader("Content-Type", "application/json")
+                    .url(finalUrl)
+                    .method("PUT", body)
                     .build();
+
             Call call = HTTP_CLIENT.newCall(request); // Create a Call object
             call.enqueue(new Callback() { // Execute a call (Asynchronous)
 
@@ -83,8 +89,11 @@ public class LoginController {
 
     @FXML
     void quitAction() {
-        // TODO: respond to quit
         Platform.exit();
     }
 
+    public void reset() {
+        usernameTextField.setText("");
+        errorMessageProperty.set("Crack The Enigma - Exercise 3");
+    }
 }

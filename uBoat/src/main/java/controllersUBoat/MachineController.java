@@ -1,10 +1,10 @@
 package controllersUBoat;
 
 import com.google.gson.Gson;
-import engine.enigmaEngine.exceptions.InvalidCharactersException;
-import engine.enigmaEngine.exceptions.InvalidPlugBoardException;
-import engine.enigmaEngine.exceptions.InvalidReflectorException;
-import engine.enigmaEngine.exceptions.InvalidRotorException;
+import jar.enigmaEngine.exceptions.InvalidCharactersException;
+import jar.enigmaEngine.exceptions.InvalidPlugBoardException;
+import jar.enigmaEngine.exceptions.InvalidReflectorException;
+import jar.enigmaEngine.exceptions.InvalidRotorException;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,8 +23,8 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Objects;
 
-import static web.http.Configuration.BASE_URL;
-import static web.http.Configuration.HTTP_CLIENT;
+import static http.Base.BASE_URL;
+import static http.Base.HTTP_CLIENT;
 
 // First screen
 public class MachineController {
@@ -42,13 +42,12 @@ public class MachineController {
     @FXML private Label currentSelectedMachineReflectorLabel;
     // For disabling screen partitions
     @FXML private VBox configurationVBox;
-    @FXML private Label setCodeLabel;
+    @FXML private Label detailsLabel;
     // Screen buttons
-    @FXML private Button setCodeButton;
+    @FXML private Button setCodeButton; // For 'default button' purposes only
     // User configuration input section
     @FXML private TextField rotorsAndOrderTextField;
     @FXML private TextField rotorsStartingPosTextField;
-    @FXML private TextField plugBoardPairsTextField;
     @FXML private ChoiceBox<String> reflectorChoiceBox;
 
     public void setMainController(AppController mainController) {
@@ -67,7 +66,6 @@ public class MachineController {
         // Adding change property
         rotorsAndOrderTextField.textProperty().addListener(new ClearStatusListener());
         rotorsStartingPosTextField.textProperty().addListener(new ClearStatusListener());
-        plugBoardPairsTextField.textProperty().addListener(new ClearStatusListener());
         // Model
         maxRotorsInMachineLabel.textProperty().bind(specs.rotorsAmountInMachineXMLProperty());
         currentUsedMachineRotorsLabel.textProperty().bind(specs.currentRotorsInMachineProperty());
@@ -86,80 +84,58 @@ public class MachineController {
 
     @FXML
     void getConfigurationFromUser() {
-        if (initializeEnigmaCode(true)) {
-            String tmp = setCodeLabel.getText();
-            updateConfigurationsAndScreens();
-            setCodeLabel.setText(tmp);
+        if (isValidConfigurationTextFields()) { // Gets input from user and generates it to the machine
+            String rotors = rotorsAndOrderTextField.getText();
+            String startingPositions = rotorsStartingPosTextField.getText();
+            String reflectorID = reflectorChoiceBox.getValue();
+
+            startingPositions = new StringBuilder(startingPositions).reverse().toString();
+
+            try {
+                AppController.getModelMain().initializeEnigmaCodeManually(rotors, startingPositions, "", reflectorID);
+                detailsLabel.setText("Manually initialized configuration code.");
+            } catch (NumberFormatException e) {
+                detailsLabel.setText("Non-numeric value was inserted in 'Rotors And Order'.");
+                return;
+            } catch (InvalidRotorException | InvalidReflectorException | InvalidPlugBoardException |
+                     InvalidCharactersException | NullPointerException | InputMismatchException | IllegalArgumentException e) {
+                detailsLabel.setText(e.getLocalizedMessage());
+                return;
+            }
         }
+        sendConfigurationToHttpClient();
+    }
+
+
+    private boolean isValidConfigurationTextFields() {
+        if (rotorsAndOrderTextField.getText().equals("")) {
+            detailsLabel.setText("You did not add your rotors' IDs and their order.");
+            return false;
+        }
+        else if (rotorsStartingPosTextField.getText().equals("")) {
+            detailsLabel.setText("You did not add your rotors' starting positions.");
+            return false;
+        }
+        return true;
     }
 
     @FXML
     void setConfigurationRandomly() {
-        if (initializeEnigmaCode(false)) {
-            updateConfigurationsAndScreens();
-        }
+        AppController.getModelMain().initializeEnigmaCodeAutomatically();
+        detailsLabel.setText("Automatically initialized configuration code.");
+        sendConfigurationToHttpClient();
     }
 
-    public void updateConfigurationsAndScreens() {
-        updateConfigurationFieldsAndMachineStateDisability();
-        mainController.resetScreens(false, null);
-    }
-
-    private boolean initializeEnigmaCode(boolean isManual) {
-        if (isManual) {
-            if (isValidConfigurationTextFields()) { // Gets input from user and generates it to the machine
-                String rotors = rotorsAndOrderTextField.getText();
-                String startingPositions = rotorsStartingPosTextField.getText();
-                String plugBoardPairs = plugBoardPairsTextField.getText();
-                String reflectorID = reflectorChoiceBox.getValue();
-
-                startingPositions = new StringBuilder(startingPositions).reverse().toString();
-
-                try {
-                    AppController.getModelMain().initializeEnigmaCodeManually(rotors, startingPositions, plugBoardPairs, reflectorID);
-                    setCodeLabel.setText("Manually initialized configuration code.");
-                } catch (NumberFormatException e) {
-                    setCodeLabel.setText("Non-numeric value was inserted in 'Rotors And Order'.");
-                    return false;
-                } catch (InvalidRotorException | InvalidReflectorException | InvalidPlugBoardException |
-                         InvalidCharactersException | NullPointerException | InputMismatchException | IllegalArgumentException e) {
-                    setCodeLabel.setText(e.getLocalizedMessage());
-                    return false;
-                }
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            AppController.getModelMain().initializeEnigmaCodeAutomatically();
-            setCodeLabel.setText("Automatically initialized configuration code.");
-        }
-        final boolean[] setConfiguration = sendConfigurationToHttpClient();
-        // JavaFX...
-        if (!setConfiguration[0]) {
-            return false;
-        } else {
-            updateMachineStatesAndDisability(AppController.getModelMain().getMachineHistoryStates().getCurrentMachineCode());
-
-            specs.setCurrentRotorsInMachine(Integer.toString(AppController.getModelMain().getEngine().getEngineDTO().getSelectedRotors().size()));
-            specs.setCurrentReflectorInMachine(AppController.getModelMain().getEngine().getEngineDTO().getSelectedReflector());
-            return true;
-        }
-    }
-
-    @NotNull
     @SuppressWarnings("SpellCheckingInspection")
-    private boolean[] sendConfigurationToHttpClient() {
-        // This means that the configuration is valid
-        final boolean[] setConfiguration = {true};
-
+    private void sendConfigurationToHttpClient() {
         Gson gson = new Gson();
-        String machineConfiguration = gson.toJson(AppController.getModelMain().getEngine().getEngineDTO());
+        String enigmaMachine = gson.toJson(AppController.getModelMain().getEngine()); // Not interface, but Class
 
         RequestBody body = // Create request body
                 new FormBody.Builder()
-                        .add("configuration", machineConfiguration)
+                        .add("username", mainController.getUBoatUsername())
+                        .add("machine", enigmaMachine)
+                        .add("required", Integer.toString(AppController.getModelMain().getXmlToServletDTO().getNumAllies()))
                         .build();
         Request request = new Request.Builder() // Create request object
                 .url(BASE_URL + "/uboat/machine-configuration")
@@ -170,45 +146,34 @@ public class MachineController {
         call.enqueue(new Callback() { // Execute a call (Asynchronous)
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() -> setCodeLabel.setText("ERROR: Failed to set machine configuration, got 4xx-5xx response!"));
-                setConfiguration[0] = false;
+                Platform.runLater(() -> detailsLabel.setText("ERROR: Failed to set machine configuration, got 4xx-5xx response!"));
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try (ResponseBody ignoredResponseBody = response.body()) {
-                    System.out.println("Successfully set machine configuration!");
-                    Platform.runLater(() -> mainController.changeToContestScreen());
+                    System.out.println("Successfully set UBoat's machine configuration!");
+                    Platform.runLater(() -> {
+                        // JavaFX...
+                        mainController.initializeMachineStates(AppController.getModelMain().getMachineHistoryStates().getCurrentMachineCode());
+                        specs.setCurrentRotorsInMachine(Integer.toString(AppController.getModelMain().getEngine().getEngineDTO().getSelectedRotors().size()));
+                        specs.setCurrentReflectorInMachine(AppController.getModelMain().getEngine().getEngineDTO().getSelectedReflector());
+                        updateConfigurationsAndScreens();
+                        try { // Make user understand what happened
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        mainController.switchToContestScreen();
+                    });
                 }
             }
         });
-        return setConfiguration;
     }
 
-    public void updateMachineStatesAndDisability(String machineStateConsoleString) {
-        mainController.initializeMachineStates(machineStateConsoleString);
-    }
-
-    private boolean isValidConfigurationTextFields() {
-        if (rotorsAndOrderTextField.getText().equals("")) {
-            setCodeLabel.setText("You did not add your rotors' IDs and their order.");
-            return false;
-        }
-        else if (rotorsStartingPosTextField.getText().equals("")) {
-            setCodeLabel.setText("You did not add your rotors' starting positions.");
-            return false;
-        }
-        else if (plugBoardPairsTextField.getText().trim().length() % 2 == 1) {
-            setCodeLabel.setText("Enter an even number of plug board pairs values.");
-            return false;
-        }
-        return true;
-    }
-
-    private void updateConfigurationFieldsAndMachineStateDisability() {
+    public void updateConfigurationsAndScreens() {
         rotorsAndOrderTextField.setText("");
         rotorsStartingPosTextField.setText("");
-        plugBoardPairsTextField.setText("");
         reflectorChoiceBox.setValue(reflectorChoiceBox.getItems().get(0));
     }
 
@@ -224,19 +189,28 @@ public class MachineController {
     public void reset() {
         setConfigurationDisability(true);
 
+        // Specifications
         specs.setRotorsAmountInMachineXML("NaN");
         specs.setCurrentRotorsInMachine("NaN");
         specs.setReflectorsAmountInMachineXML("NaN");
         specs.setCurrentReflectorInMachine("NaN");
+
+        // Configuration
+        rotorsAndOrderTextField.setText("");
+        rotorsStartingPosTextField.setText("");
+        reflectorChoiceBox.getItems().clear();
+
+        // Details label
+        emptyDetailsLabelText();
     }
 
     class ClearStatusListener implements ChangeListener<String> {
         @Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            mainController.updateLabelTextsToEmpty();
+            mainController.emptyLabelText();
         }
     }
-    public void updateLabelTextsToEmpty() {
-        setCodeLabel.setText("");
+    public void emptyDetailsLabelText() {
+        detailsLabel.setText("");
     }
 
 

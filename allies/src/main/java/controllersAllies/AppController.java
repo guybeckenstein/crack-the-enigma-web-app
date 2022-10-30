@@ -8,7 +8,9 @@ public class AppController {
 
     // Sub components
     @SuppressWarnings({"UnusedDeclaration"}) @FXML private HeaderController headerComponentController;
+    @FXML private ScrollPane loginComponent;
     @FXML private ScrollPane dashboardComponent;
+    @FXML private ScrollPane contestComponent;
     @SuppressWarnings({"UnusedDeclaration"}) @FXML private LoginController loginComponentController;
     @SuppressWarnings({"UnusedDeclaration"}) @FXML private DashboardController dashboardComponentController;
     @SuppressWarnings({"UnusedDeclaration"}) @FXML private ContestController contestComponentController;
@@ -33,6 +35,24 @@ public class AppController {
     public void switchToDashboardScreen() {
         dashboardComponent.toFront();
         headerComponentController.switchToDashboardScreen();
-        // TODO: add allies to server, make it possible to Agents, etc...
+        dashboardComponentController.initializeDashboardScreen();
+    }
+
+    public String getAlliesUsername() {
+        return headerComponentController.getUsername();
+    }
+
+    public void switchToContestScreen(String contestUsername, String contestTitle) {
+        contestComponent.toFront();
+        headerComponentController.switchToContestScreen();
+        contestComponentController.initializeContestScreen(contestUsername, contestTitle);
+    }
+
+    public void switchToLoginScreen() {
+        // Reset header
+        headerComponentController.switchToLoginScreen();
+        // Reset login screen
+        loginComponent.toFront();
+        loginComponentController.reset();
     }
 }

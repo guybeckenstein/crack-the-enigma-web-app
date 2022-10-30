@@ -1,9 +1,9 @@
 package interfaces;
 
-import engine.dto.XmlDTO;
-import engine.dto.XmlToServletDTO;
-import engine.enigmaEngine.exceptions.*;
-import engine.enigmaEngine.interfaces.EnigmaEngine;
+import jar.dto.XmlDTO;
+import jar.dto.XmlToServletDTO;
+import jar.enigmaEngine.exceptions.*;
+import jar.enigmaEngine.interfaces.EnigmaEngine;
 import historyAndStatistics.MachineHistoryAndStatistics;
 
 import javax.xml.bind.JAXBException;
@@ -15,7 +15,6 @@ public interface Input {
     String getCurrentMachineStateAsString();
     XmlDTO getXmlDTO();
     XmlToServletDTO getXmlToServletDTO();
-    int getMessageCounter();
     MachineHistoryAndStatistics getMachineHistoryStates();
     EnigmaEngine getEngine();
     void createMachineFromXMLFile(String path) throws JAXBException, InvalidRotorException, IOException, InvalidABCException, InvalidReflectorException, InvalidDecipherException, InvalidMachineException, InvalidBattlefieldException;
@@ -23,6 +22,5 @@ public interface Input {
     void initializeEnigmaCodeAutomatically();
     String getMessageAndProcessIt(String messageInput, boolean bool) throws InvalidCharactersException;
     void resetMachine();
-    String getMachineStatisticsAndHistory();
     Set<String> getWordsDictionary();
 }

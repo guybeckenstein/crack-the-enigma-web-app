@@ -1,5 +1,5 @@
 1.	in directory 'src\main\java'
 2.	add file Enigma-Ex3.xsd
 3.	open folder's cmd
-4.	type 'xjc -d . -p engine.enigmaEngine.schemaBinding Enigma-Ex3.xsd'
+4.	type 'xjc -d . -p engine.engineDTO.schemaBinding Enigma-Ex3.xsd'
 *	Enigma-Ex3.xsd is xml schema source

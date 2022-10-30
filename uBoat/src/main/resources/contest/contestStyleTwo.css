@@ -64,10 +64,12 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 1, 100, 0, 0);
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 .search-dictionary-words-vbox #dictionaryScrollPane .viewport {
     -fx-background-color: #f0f0f0;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 .search-dictionary-words-vbox #dictionaryScrollPane .list-view, .thumb {
     -fx-background-color: #f0f0f0;
     -fx-font-weight: Bold;
@@ -75,10 +77,12 @@
     -fx-text-fill: #000000;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 .search-dictionary-words-vbox #dictionaryScrollPane .track {
     -fx-background-color: none;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 .search-dictionary-words-vbox #dictionaryScrollPane .track-background {
     -fx-background-color: #c4c4c4;
 }
@@ -98,6 +102,7 @@
     -fx-padding: 0;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #contestTableView .column-header-background .nested-column-header .table-column {
     -fx-background-color: #0f228c;
     -fx-border-color: black;
@@ -109,22 +114,26 @@
     -fx-font-weight: Bold;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #contestTableView .column-header-background .show-hide-columns-button {
     -fx-background-color: #0f228c;
     -fx-border-color: black;
     -fx-border-width: 1px 1px 2px 1px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #contestTableView .virtual-flow .scroll-bar:vertical .track-background {
     -fx-background-color: #ffffff;
     -fx-border-color: #323232;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #contestTableView .virtual-flow .scroll-bar:vertical .track-background {
     -fx-background-color: #ffffff;
     -fx-border-color: #323232;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #contestTableView .placeholder {
     -fx-text-fill: #cdcdcd;
 }
@@ -162,24 +171,29 @@
     -fx-font-size: 14px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #searchDictionaryWordsHBox .scroll-pane {
     -fx-background-color: transparent;
     -fx-effect: dropshadow(gaussian, rgba(204, 204, 204, 1.0), 1, 100, 0, 0);
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #searchDictionaryWordsHBox .scroll-pane .list-view, .viewport {
     -fx-background-color: #ffffff;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #searchDictionaryWordsHBox .scroll-pane .track-background, .scroll-pane .track {
     -fx-background-color: #bbbbbb;
     -fx-border-width: 0px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 .scroll-pane .track {
     -fx-effect: none;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 .scroll-pane .thumb, .increment-button .increment-arrow, .decrement-button .decrement-arrow {
     -fx-background-color: #505050;
     -fx-effect: none;

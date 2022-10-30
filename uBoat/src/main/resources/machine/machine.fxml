@@ -16,6 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
+<!--suppress ALL -->
 <ScrollPane fx:id="mainScrollPane" cache="true" fitToHeight="true" fitToWidth="true" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersUBoat.MachineController">
    <content>
       <BorderPane fx:id="mainBorderPane" styleClass="grid-pane">
@@ -176,29 +177,6 @@
                      <children>
                         <VBox>
                            <children>
-                              <Label styleClass="header-label" text="Plug board pairs:" textFill="WHITE">
-                                 <font>
-                                    <Font name="Arial" size="18.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <TextField fx:id="plugBoardPairsTextField" maxWidth="166.0" minHeight="30.0" minWidth="166.0" prefHeight="30.0" prefWidth="166.0" promptText="No separation ‘,’...">
-                                 <font>
-                                    <Font name="Arial" size="18.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <padding>
-                                    <Insets bottom="3.0" left="4.0" top="1.0" />
-                                 </padding>
-                              </TextField>
-                           </children>
-                        </VBox>
-                        <VBox>
-                           <children>
                               <Label styleClass="header-label" text="Reflector:" textFill="WHITE">
                                  <font>
                                     <Font name="Arial" size="18.0" />
@@ -224,7 +202,7 @@
                   </FlowPane>
                   <TextFlow maxHeight="26.0" minHeight="26.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label fx:id="setCodeLabel" alignment="TOP_LEFT" cache="true" maxHeight="1.7976931348623157E308" maxWidth="390.0" styleClass="info-label" textFill="GAINSBORO" wrapText="true">
+                        <Label fx:id="detailsLabel" alignment="TOP_LEFT" cache="true" maxHeight="1.7976931348623157E308" maxWidth="390.0" styleClass="info-label" textFill="GAINSBORO" wrapText="true">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -241,7 +219,7 @@
                               <Font name="Arial Bold" size="16.0" />
                            </font>
                         </Button>
-                        <Button fx:id="setCodeButton" maxHeight="41.0" maxWidth="106.0" minHeight="41.0" minWidth="106.0" mnemonicParsing="false" onAction="#getConfigurationFromUser" prefHeight="41.0" prefWidth="106.0" styleClass="setCodeButton" text="Set Code" textFill="#323232">
+                        <Button fx:id="setCodeButton" defaultButton="true" maxHeight="41.0" maxWidth="106.0" minHeight="41.0" minWidth="106.0" mnemonicParsing="false" onAction="#getConfigurationFromUser" prefHeight="41.0" prefWidth="106.0" styleClass="setCodeButton" text="Set Code" textFill="#323232">
                            <font>
                               <Font name="Arial Bold" size="16.0" />
                            </font>

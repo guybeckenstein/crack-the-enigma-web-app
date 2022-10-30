@@ -1,17 +1,13 @@
 package controllersUBoat;
 
-import common.rawData.battlefieldContest.AlliesData;
-import decryptionManager.Candidate;
-import decryptionManager.DecryptionManagerTask;
-import decryptionManager.Difficulty;
-import engine.enigmaEngine.exceptions.InvalidCharactersException;
-import engine.enigmaEngine.interfaces.EnigmaEngine;
 import impl.Trie;
 import impl.models.MachineStateModel;
-import javafx.collections.FXCollections;
+import interfaces.TrieInterface;
+import jar.common.rawData.Candidate;
+import jar.common.rawData.battlefieldContest.AlliesData;
+import jar.enigmaEngine.exceptions.InvalidCharactersException;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,16 +15,25 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
+import timerTasks.contest.pre.ActiveTeamsTimerTask;
+import timerTasks.contest.pre.StartContestTimerTask;
+import timerTasks.contest.start.ContestFinishedTimerTask;
+import timerTasks.contest.start.FinalCandidatesTimerTask;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static http.Base.BASE_URL;
+import static http.Base.HTTP_CLIENT;
 
 // Third screen
 public class ContestController {
     // Buttons component
-    @FXML VBox contestButtonsVBox;
-    @FXML public Button ready;
-    @FXML public Button logout;
+    @FXML public Button readyButton;
+    @FXML public Button logoutButton;
     // Main component
     private AppController mainController;
     // Models
@@ -41,7 +46,7 @@ public class ContestController {
     @FXML private VBox searchVBox; // Only for binding the ENTER key to the input text field
     @FXML private TextField searchInputTextField;
     @FXML private ListView<String> searchDictionaryWordsListView;
-    Trie dictionaryTrie;
+    private TrieInterface dictionaryTrie;
     // Input to encrypt / decrypt
     @FXML private VBox keyboardInputVBox; // Only for binding the ENTER key to the input text field
     @FXML private TextField encryptionInputTextField;
@@ -52,31 +57,27 @@ public class ContestController {
     @FXML private TableColumn<AlliesData, String> alliesUsernameColumn;
     @FXML private TableColumn<AlliesData, String> totalAgentsColumn;
     @FXML private TableColumn<AlliesData, String> taskSizeColumn;
-
-    // DM Operational component
-    private EnigmaEngine taskCurrentConfiguration;
-    private DecryptionManagerTask dmTask;
-    private String timeElapsed = "";
+    private Timer activeTeamsTimer;
     // DM Output - table view
     @FXML private TableView<Candidate> finalCandidatesTableView;
     @FXML private TableColumn<Candidate, String> configurationColumn;
     @FXML private TableColumn<Candidate, String> wordsColumn;
     @FXML private TableColumn<Candidate, String> timeColumn;
     @FXML private TableColumn<Candidate, String> alliesColumn;
-    private final ObservableList<Candidate> candidateList;
+    private Timer finalCandidatesTimer;
+    // Contest itself
+    private boolean contestStarted;
+    private Timer startContestTimer;
+    private Timer contestFinishedTimer;
 
 
     public ContestController() {
         machineStatesConsole = new MachineStateModel(); // Model
-        candidateList = FXCollections.observableArrayList();
     }
 
     @FXML
     private void initialize() {
         initKeyboardInput();
-
-        contestButtonsVBox.setDisable(true);
-
         initDictionaryTrie();
         firstMachineStateLabel.textProperty().bind(machineStatesConsole.firstMachineStateProperty());
         currentMachineStateLabel.textProperty().bind(machineStatesConsole.currentMachineStateProperty());
@@ -84,6 +85,7 @@ public class ContestController {
         initActiveTeamsTableView();
         initCandidatesTableView();
 
+        readyButton.setMouseTransparent(true);
     }
 
     private void initKeyboardInput() {
@@ -96,7 +98,6 @@ public class ContestController {
             }
         });
     }
-
     private void initDictionaryTrie() {
         searchInputTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDictionaryWordsListView.getItems().remove(0, searchDictionaryWordsListView.getItems().size());
@@ -122,7 +123,6 @@ public class ContestController {
             }
         });
     }
-
     private void initActiveTeamsTableView() {
         alliesUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         totalAgentsColumn.setCellValueFactory(new PropertyValueFactory<>("totalAgents"));
@@ -130,19 +130,19 @@ public class ContestController {
         activeTeamsTableView.setPlaceholder(new Label("No active teams to display"));
 
         // Automatically scrolls down
-        finalCandidatesTableView.getItems().addListener((ListChangeListener<Candidate>) (c -> {
+        activeTeamsTableView.getItems().addListener((ListChangeListener<AlliesData>) (c -> {
             c.next();
-            final int size = finalCandidatesTableView.getItems().size();
+            final int size = activeTeamsTableView.getItems().size();
             if (size > 0) {
-                finalCandidatesTableView.scrollTo(size - 1);
+                activeTeamsTableView.scrollTo(size - 1);
             }
         }));
     }
     private void initCandidatesTableView() {
         configurationColumn.setCellValueFactory(new PropertyValueFactory<>("machineConfiguration"));
-        wordsColumn.setCellValueFactory(new PropertyValueFactory<>("dictionaryWords"));
+        wordsColumn.setCellValueFactory(new PropertyValueFactory<>("dictionaryWordsMessage"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("timeElapsed"));
-        alliesColumn.setCellValueFactory(new PropertyValueFactory<>("agent"));
+        alliesColumn.setCellValueFactory(new PropertyValueFactory<>("allies"));
         finalCandidatesTableView.setPlaceholder(new Label("No candidates to display"));
 
         // Automatically scrolls down
@@ -155,64 +155,103 @@ public class ContestController {
         }));
     }
 
+    public void initializeContestScreen() {
+        // Initialize Timers
+        activeTeamsTimer = new Timer(true);
+        finalCandidatesTimer = new Timer(true);
+        startContestTimer = new Timer(true);
+        contestFinishedTimer = new Timer(true);
+
+        contestStarted = false;
+
+        ActiveTeamsTimerTask myAgentsTimerTask = new ActiveTeamsTimerTask(this); // Extends TimerTask
+        activeTeamsTimer.scheduleAtFixedRate(myAgentsTimerTask, 0, 500);
+        StartContestTimerTask startContestTimerTask = new StartContestTimerTask(this); // Extends TimerTask
+        startContestTimer.scheduleAtFixedRate(startContestTimerTask, 0, 500);
+    }
+
+    public String getUsername() {
+        return mainController.getUBoatUsername();
+    }
+
     @FXML
     void readyAction() {
-        toggleTaskButtons(true);
+        updateServerYouAreReady();
+        encryptionInputTextField.setText("");
+        // Update transparency settings
+        keyboardInputVBox.setMouseTransparent(true);
+        readyButton.setMouseTransparent(true);
+        searchVBox.setMouseTransparent(true);
+        searchDictionaryWordsListView.setMouseTransparent(true);
+    }
 
-        if (ready.getText().contains("Ready")) {
-            // TODO: update to ex3
-            long totalTasks = 450;
-            int totalAgents = 2;
-            int taskSize = 1;
-            Difficulty difficulty = Difficulty.EASY;
+    @SuppressWarnings("unused")
+    private void updateServerYouAreReady() {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
 
-            dmTask = new DecryptionManagerTask(
-                    encryptionOutputTextField.getText(), totalTasks, totalAgents, taskSize, difficulty,
-                    AppController.getModelMain().getXmlDTO().getReflectorsFromXML().size(),
-                    AppController.getModelMain().getXmlDTO().getRotorsFromXML().size(), this, this::dmOnFinished);
+        // URL
+        String RESOURCE = "/uboat/contest";
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(BASE_URL + RESOURCE)).newBuilder();
+        urlBuilder.addQueryParameter("username", getUsername());
+        urlBuilder.addQueryParameter("input", encryptionInputTextField.getText());
+        String finalUrl = urlBuilder.build().toString();
 
-            Thread th = new Thread(dmTask);
-            th.start();
-            System.out.println("Starting the task...");
-        } else {
-            new Alert(Alert.AlertType.ERROR, "Could not press 'Ready' button!").showAndWait();
+        // Request + body + response
+        try {
+            MediaType mediaType = MediaType.parse("text/plain");
+            RequestBody body = RequestBody.create("", mediaType);
+
+            Request request = new Request.Builder()
+                    .url(finalUrl)
+                    .method("POST", body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println("ERROR: " + e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    try (ResponseBody body = response.body()) {
+                        System.out.println("Server notified, " + getUsername() + " UBoat is ready!");
+                        Platform.runLater(() -> sendEncryptedMessageToAllies());
+                    }
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
     }
 
-    public EnigmaEngine getTaskCurrentConfiguration() {
-        return taskCurrentConfiguration;
-    }
+    private void sendEncryptedMessageToAllies() {
+        RequestBody body = new FormBody.Builder() // Create request body
+                .add("username", getUsername())
+                .add("message", encryptionOutputTextField.getText())
+                .build();
+        Request request = new Request.Builder() // Create request object
+                .url(BASE_URL + "/uboat/set-message")
+                .post(body)
+                .build();
+        Call call = HTTP_CLIENT.newCall(request); // Create a Call object
 
-    public synchronized void updateValues(Queue<Candidate> newCandidates) {
-        if (!newCandidates.isEmpty()) {
-            finalCandidatesTableView.getItems().addAll(newCandidates);
-            while (!newCandidates.isEmpty()) {
-                candidateList.add(newCandidates.remove());
+        call.enqueue(new Callback() { // Execute a call (Asynchronous)
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("ERROR: " + e.getLocalizedMessage());
             }
-        }
-    }
 
-    private void toggleTaskButtons(boolean bool) {
-        keyboardInputVBox.setDisable(bool);
-        searchVBox.setDisable(bool);
-        ready.setDisable(bool);
-        logout.setDisable(!bool);
-    }
-
-    @FXML
-    void logoutAction() {
-        dmTask.cancel();
-        // TODO: update to ex3 (exit screen and update other clients)
-        if (dmTask != null) {
-            dmOnFinished();
-        }
-
-    }
-
-    private void updateDecryptionManagerDetails() {
-        timeElapsed = "0";
-        finalCandidatesTableView.getItems().removeAll(candidateList);
-        candidateList.removeAll(candidateList);
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                try (ResponseBody ignoredResponseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        System.out.println("Added UBoat encryption message to server"); // log
+                    }
+                }
+            }
+        });
     }
 
     public void updateDictionary() {
@@ -238,13 +277,11 @@ public class ContestController {
                 messageInput = messageInput.substring(0, messageInput.length() - 1);
             }
             String messageOutput = AppController.getModelMain().getMessageAndProcessIt(messageInput, true);
-            contestButtonsVBox.setDisable(false);
 
             new Alert(Alert.AlertType.CONFIRMATION, "Processed message: " + messageInput + " -> " + messageOutput).show();
+            readyButton.setMouseTransparent(false);
             encryptionOutputTextField.setText(messageOutput);
-            mainController.updateMachineStateAndDictionary(AppController.getModelMain().getCurrentMachineStateAsString());
-            mainController.updateLabelTextsToEmpty();
-            taskCurrentConfiguration = AppController.getModelMain().getEngine().deepClone();
+            machineStatesConsole.setCurrentMachineState(AppController.getModelMain().getCurrentMachineStateAsString());
         } catch (InvalidCharactersException | InputMismatchException e) {
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage()).show();
         }
@@ -276,25 +313,14 @@ public class ContestController {
     @FXML
     void resetInputActionListener() {
         AppController.getModelMain().resetMachine();
-        mainController.resetScreens(true, null);
-    }
+        encryptionInputTextField.setText("");
+        searchDictionaryWordsListView.getSelectionModel().clearSelection();
+        readyButton.setMouseTransparent(true);
 
-    public void updateMachineStateAndDictionary(String currentMachineState) {
-        machineStatesConsole.setCurrentMachineState(currentMachineState);
-    }
-
-    public void resetMachineStateAndEnigmaOutput(boolean bool, Object controller) {
-        if (bool && controller == null) {
-            new Alert(Alert.AlertType.INFORMATION, "Machine state has been successfully reset.").show();
-        }
+        new Alert(Alert.AlertType.INFORMATION, "Machine state has been successfully reset.").show();
         machineStatesConsole.setCurrentMachineState(machineStatesConsole.getFirstMachineState());
         encryptionOutputTextField.setText("NaN");
     }
-
-    public void updateLabelTextsToEmpty() {
-        encryptionInputTextField.setText("");
-    }
-
 
     public void updateStylesheet(Number num) {
         mainScrollPane.getStylesheets().remove(0);
@@ -307,35 +333,244 @@ public class ContestController {
         }
     }
 
-    public void bindTaskToUIComponents(Task<Boolean> aTask, Runnable onFinish) {
-        // task cleanup upon finish
-        aTask.valueProperty().addListener((observable, oldValue, newValue) -> onTaskFinished(Optional.ofNullable(onFinish)));
-    }
-
-    public void unbindTaskFromUIComponents(String timeElapsed, boolean bool) {
-        toggleTaskButtons(false);
-        if (bool) {
-            this.timeElapsed = timeElapsed;
+    public void updateActiveTeamsTableView(Collection<AlliesData> allCurrent) {
+        if (allCurrent != null) {
+            activeTeamsTableView.getItems().clear();
+            activeTeamsTableView.getItems().addAll(allCurrent);
         }
     }
 
-    public void onTaskFinished(Optional<Runnable> onFinish) {
-        onFinish.ifPresent(Runnable::run);
+    public void startContestMode() {
+        try {
+            activeTeamsTimer.cancel();
+            Thread.sleep(100);
+            startContestTimer.cancel();
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        contestStarted = true;
+        encryptionInputTextField.setText("");
+        System.out.println("Start contest mode...");
+
+        addContestToServer();
+        initializeContestTimerTasks();
     }
 
-    private void dmOnFinished() {
-        // TODO: create dynamic logout button and add it
-        // TODO: implement logout button logic
-        timeElapsed = dmTask.getTimeElapsed();
-        dmTask.cancel();
-        dmTask = null;
-        unbindTaskFromUIComponents(timeElapsed, true);
+    @SuppressWarnings("unused")
+    private void addContestToServer() {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "This took " + timeElapsed + " seconds.");
-        alert.setTitle("Done!");
-        alert.setHeaderText("Done!");
-        alert.showAndWait();
+        // URL
+        String RESOURCE = "/uboat/get-candidates";
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(BASE_URL + RESOURCE)).newBuilder();
+        urlBuilder.addQueryParameter("username", getUsername());
+        String finalUrl = urlBuilder.build().toString();
 
-        updateDecryptionManagerDetails();
+        // Request + body + response
+        try {
+            RequestBody body = new FormBody.Builder() // Create request body
+                    .build();
+            Request request = new Request.Builder()
+                    .url(finalUrl)
+                    .method("PUT", body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    try (ResponseBody body = response.body()) {
+                        System.out.println("Successfully created template for FinalCandidatesTableView in server!");
+                    }
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Updates candidatesTableView, according to the Allies' teams
+    private void initializeContestTimerTasks() {
+        FinalCandidatesTimerTask finalCandidatesTimerTask = new FinalCandidatesTimerTask(this); // Extends TimerTask
+        finalCandidatesTimer.scheduleAtFixedRate(finalCandidatesTimerTask, 0, 500);
+        ContestFinishedTimerTask contestFinishedTimerTask = new ContestFinishedTimerTask(this); // Extends TimerTask
+        contestFinishedTimer.scheduleAtFixedRate(contestFinishedTimerTask, 0, 500);
+    }
+
+    public void updateFinalCandidatesTableView(Queue<Candidate> currentCandidates) {
+        Candidate selectedItem = finalCandidatesTableView.getSelectionModel().getSelectedItem();
+        finalCandidatesTableView.getItems().clear();
+        finalCandidatesTableView.getItems().addAll(currentCandidates);
+        finalCandidatesTableView.getSelectionModel().select(selectedItem);
+    }
+
+    // Stopped when an Allies' team finds the original message ONLY (using List.equals() method)
+    public void stopContest(String winningAllies) {
+        finalCandidatesTimer.cancel();
+        contestFinishedTimer.cancel();
+        if (!winningAllies.trim().isEmpty()) {
+            resetBattlefield();
+            // Show message to UBoat client
+            new Alert(Alert.AlertType.INFORMATION, "Contest has finished.\n" +
+                    "The winner is " + winningAllies.trim()).showAndWait();
+        }
+        emptyBattlefieldContenders();
+        resetNodes();
+    }
+
+    // Removes Allies from contest
+    private void emptyBattlefieldContenders() {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+
+        // URL
+        String RESOURCE = "/uboat/get-allies";
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(BASE_URL + RESOURCE)).newBuilder();
+        urlBuilder.addQueryParameter("username", getUsername());
+        String finalUrl = urlBuilder.build().toString();
+
+        // Request + body + response
+        try {
+            RequestBody body = new FormBody.Builder() // Create request body
+                    .build();
+            Request request = new Request.Builder()
+                    .url(finalUrl)
+                    .method("POST", body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println("Unable to remove allies from " + getUsername() + "'s battlefield.");
+                    System.out.println(e.getLocalizedMessage());
+                }
+
+                @SuppressWarnings("unused")
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    try (ResponseBody body = response.body()) {
+                        System.out.println("Successfully removed allies from " + getUsername() + "'s battlefield.");
+                    }
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void resetNodes() {
+        searchDictionaryWordsListView.getSelectionModel().select(0);
+        encryptionInputTextField.setText("");
+        encryptionOutputTextField.setText("");
+        // Update transparency settings
+        keyboardInputVBox.setMouseTransparent(false);
+        readyButton.setMouseTransparent(true);
+        searchVBox.setMouseTransparent(false);
+        searchDictionaryWordsListView.setMouseTransparent(false);
+        // Empty TableViews
+        activeTeamsTableView.getItems().clear();
+        finalCandidatesTableView.getItems().clear();
+    }
+
+    @SuppressWarnings("unused")
+    private void resetBattlefield() {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+
+        // URL
+        String RESOURCE = "/uboat/reset-battlefield";
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(BASE_URL + RESOURCE)).newBuilder();
+        urlBuilder.addQueryParameter("username", getUsername());
+        String finalUrl = urlBuilder.build().toString();
+
+        // Request + body + response
+        try {
+            RequestBody body = new FormBody.Builder() // Create request body
+                    .build();
+            Request request = new Request.Builder()
+                    .url(finalUrl)
+                    .method("PUT", body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println("Unable to reset battlefield's details.");
+                    System.out.println(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    try (ResponseBody body = response.body()) {
+                        System.out.println("Successfully reset battlefield's details!");
+                    }
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void logoutAction() {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+
+        // URL
+        String RESOURCE = "/uboat/remove";
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(BASE_URL + RESOURCE)).newBuilder();
+        urlBuilder.addQueryParameter("username", getUsername());
+        String finalUrl = urlBuilder.build().toString();
+
+        // Request + body + response
+        try {
+            RequestBody body = new FormBody.Builder() // Create request body
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(finalUrl)
+                    .method("POST", body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println("ERROR: Failing to logout user " + getUsername() + "!");
+                    System.out.println(e.getLocalizedMessage());
+                }
+
+                @SuppressWarnings("unused")
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    try (ResponseBody body = response.body()) {
+                        if (contestStarted) {
+                            System.out.println(getUsername() + " has logged out during contest, will be redirected to login screen.");
+                            Platform.runLater(() -> stopContest(""));
+                        } else {
+                            System.out.println(getUsername() + " has logged out before contest, will be redirected to login screen.");
+                            Platform.runLater(() -> {
+                                if (contestStarted) {
+                                    finalCandidatesTimer.cancel();
+                                    contestFinishedTimer.cancel();
+                                } else {
+                                    activeTeamsTimer.cancel();
+                                    startContestTimer.cancel();
+                                }
+                                resetNodes();
+                                mainController.switchToLoginScreen();
+                            });
+                        }
+                    }
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 }

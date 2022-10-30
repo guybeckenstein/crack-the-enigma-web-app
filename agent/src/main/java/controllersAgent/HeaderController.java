@@ -6,9 +6,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 
 public class HeaderController {
-
-    // Main controller
-    
     // Screens buttons
     @FXML private Button contestButton;
     // Style
@@ -33,6 +30,14 @@ public class HeaderController {
     }
     public void updateUsername(String username) {
         this.username = username;
-        usernameHeaderLabel.setText("Hello " + username + " - UBoat User");
+        usernameHeaderLabel.setText("Hello " + username + " - Agent User");
+    }
+
+    public void switchToLoginScreen() {
+        // Reset header details
+        username = "Guest";
+        usernameHeaderLabel.setText("Hello " + username + " - Allies User");
+        // Reset header style
+        contestButton.getStyleClass().remove("chosen-button");
     }
 }

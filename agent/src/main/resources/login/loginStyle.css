@@ -26,36 +26,71 @@
     -fx-font-weight: Bold;
 }
 
-#moreChoicesHBox .choice-box {
-    -fx-font-size: 20px;
-    -fx-background-color: #f0f0f0;
+/*noinspection ALL,CssUnusedSymbol*/
+#moreChoicesHBox .combo-box {
+    -fx-font-size: 12px;
+    -fx-background-color: #ffffff;
     -fx-border-color: #505050;
     -fx-border-width: 2px;
 }
 
-#moreChoicesHBox .choice-box .label {
-
+/*noinspection ALL,CssUnusedSymbol*/
+#moreChoicesHBox .combo-box .arrow-button {
+    -fx-background-color: #f0f0f0;
 }
 
-#moreChoicesHBox .choice-box .open-button .arrow {
+/*noinspection ALL,CssUnusedSymbol*/
+#moreChoicesHBox .combo-box .open-button .arrow {
     -fx-background-color: #505050;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #moreChoicesHBox .slider .thumb {
     -fx-background-color: #505050;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #moreChoicesHBox .slider .track {
     -fx-background-color: #b4b4b4;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #moreChoicesHBox .slider .axis:bottom .axis-tick-mark {
     -fx-fill: null;
     -fx-stroke: #ffffff;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #moreChoicesHBox .slider .axis:bottom {
     -fx-tick-label-fill: #505050;
+}
+
+#moreChoicesHBox #tasksWithdrawalSizeComboBox {
+    -fx-border-insets: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-label-padding: 0;
+    -fx-border-color: #c03049;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 5px;
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #323232;
+    -fx-font-family: Arial;
+    -fx-font-size: 14px;
+    -fx-background-position: 0;
+}
+
+/*noinspection ALL,CssUnusedSymbol*/
+#moreChoicesHBox #tasksWithdrawalSizeComboBox .arrow-button {
+    -fx-background-insets: 0;
+    -fx-background-color: #c03049;
+    -fx-background-radius: 1px;
+}
+
+/*noinspection ALL,CssUnusedSymbol*/
+#moreChoicesHBox #tasksWithdrawalSizeComboBox .arrow-button .arrow {
+    -fx-background-color: #323232;
 }
 
 /* Login or Quit */

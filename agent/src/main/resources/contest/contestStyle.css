@@ -16,6 +16,7 @@
     -fx-font-style: Italic;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #contestAndTeamDataVBox .table-view {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #ffffff;
@@ -24,6 +25,7 @@
     -fx-font-size: 16px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #contestAndTeamDataVBox .table-column , .filler {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #dcdcdc;
@@ -37,6 +39,21 @@
 #mainGridPane #contestAndTeamDataVBox .text-field {
     -fx-font-size: 20px;
     -fx-border-color: #000000;
+}
+
+#mainGridPane #contestAndTeamDataVBox #logoutButton {
+    -fx-background-color: #d02d2d;
+    -fx-border-color: #d02d2d;
+    -fx-text-fill: #f0f0f0;
+    -fx-font-size: 24px;
+    -fx-font-family: Arial;
+    -fx-font-weight: Bold;
+}
+
+#mainGridPane #contestAndTeamDataVBox #logoutButton:hover {
+    -fx-background-color: #e10606;
+    -fx-border-color: #be0b0b;
+    -fx-text-fill: #ffffff;
 }
 
 /* Agent Progress & Status */
@@ -80,6 +97,7 @@
     -fx-border-color: #000000;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #agentCandidatesVBox .table-view {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #ffffff;
@@ -87,6 +105,7 @@
     -fx-border-width: 1px 1px 1px 1px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #agentCandidatesVBox .table-column , .filler {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #dcdcdc;

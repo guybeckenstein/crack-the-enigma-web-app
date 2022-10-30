@@ -1,3 +1,4 @@
+/*noinspection ALL,CssUnusedSymbol*/
 .scroll-pane {
     -fx-background-color: #000000;
 }
@@ -20,7 +21,7 @@
     -fx-padding: 0em 0em 0em 0.25em;
 }
 
-.choice-box .label {
+.choice-box .label, .combo-box .label {
     -fx-padding: 0.1em 0em 0em 0.25em;
 }
 
@@ -33,7 +34,8 @@
     -fx-prompt-text-fill: #505050;
 }
 
-.button, .choice-box, .scroll-pane, .text-field, .text-area, .list-view, .list-cell, .slider, .scroll-bar, .menu, .label, .scroll-pane, .slider .track, .slider .thumb, .progress-bar, .progress-bar .bar, .progress-bar .track {
+/*noinspection ALL,CssUnusedSymbol*/
+.button, .choice-box, .combo-box, .scroll-pane, .text-field, .text-area, .list-view, .list-cell, .slider, .scroll-bar, .menu, .label, .scroll-pane, .slider .track, .slider .thumb, .progress-bar, .progress-bar .bar, .progress-bar .track {
     -fx-focus-color: transparent;
     -fx-accent: #505050;
     -fx-background-insets: 0px;
@@ -43,7 +45,8 @@
     -fx-focus-traversable: false;
 }
 
-.button:focused, .choice-box:focused, .scroll-pane:focused, .text-field:focused, .text-area:focused, .list-view:focused, .list-cell:focused, .slider:focused, .scroll-bar:focused, .menu:focused, .label:focused, .scroll-pane:focused,  .slider .track:focused, .slider .thumb:focused, .progress-bar:focused, .progress-bar .bar:focused, .progress-bar .track:focused {
+/*noinspection ALL,CssUnusedSymbol*/
+.button:focused, .choice-box:focused, .combo-box:focused, .scroll-pane:focused, .text-field:focused, .text-area:focused, .list-view:focused, .list-cell:focused, .slider:focused, .scroll-bar:focused, .menu:focused, .label:focused, .scroll-pane:focused,  .slider .track:focused, .slider .thumb:focused, .progress-bar:focused, .progress-bar .bar:focused, .progress-bar .track:focused {
     -fx-faint-focus-color: transparent;
     -fx-focus-color: transparent;
     -fx-background-insets: 0px;
@@ -54,17 +57,20 @@
     -fx-font-size: 12px;
 }
 
-.choice-box .label {
+.choice-box .label, .combo-box .label {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0), 1, 0, 1, 1);
     -fx-text-fill: #505050;
 }
 
-.choice-box .context-menu {
+/*noinspection ALL,CssUnusedSymbol*/
+.choice-box .context-menu, .combo-box .context-menu {
     -fx-background-color: #ffffff;
     -fx-border-width: 2px;
     -fx-border-color: #505050;
 }
-.choice-box .menu-item:focused, .menu-item:focused .label {
+
+/*noinspection ALL,CssUnusedSymbol*/
+.choice-box .menu-item:focused, .menu-item:focused .label, .combo-box .menu-item:focused {
     -fx-background-color: #505050;
     -fx-text-fill: #ffffff;
 }

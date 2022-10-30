@@ -1,4 +1,4 @@
-import common.StartPrimaryStage;
+import jar.common.StartPrimaryStage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

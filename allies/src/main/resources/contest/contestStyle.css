@@ -16,6 +16,7 @@
     -fx-font-style: Italic;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #contestDataVBox .table-view {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #ffffff;
@@ -23,6 +24,7 @@
     -fx-border-width: 1px 1px 1px 1px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #contestDataVBox .table-column , .filler {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #dcdcdc;
@@ -47,6 +49,17 @@
     -fx-text-fill: #ffffff;
 }
 
+#mainGridPane #contestDataVBox #logoutButton {
+    -fx-background-color: #d02d2d;
+    -fx-border-color: #d02d2d;
+}
+
+#mainGridPane #contestDataVBox #logoutButton:hover {
+    -fx-background-color: #e10606;
+    -fx-border-color: #be0b0b;
+    -fx-text-fill: #ffffff;
+}
+
 #mainGridPane #contestDataVBox .text-field {
     -fx-font-size: 16px;
     -fx-border-color: #000000;
@@ -66,6 +79,7 @@
     -fx-font-style: Italic;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #alliesDataVBox .table-view {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #ffffff;
@@ -73,6 +87,7 @@
     -fx-border-width: 1px 1px 1px 1px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #alliesDataVBox .table-column , .filler {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #dcdcdc;
@@ -97,7 +112,7 @@
 }
 
 
-
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #progressDataVBox .table-view {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #ffffff;
@@ -105,6 +120,7 @@
     -fx-border-width: 1px 1px 1px 1px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #progressDataVBox .table-column , .filler {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #dcdcdc;
@@ -148,6 +164,7 @@
     -fx-border-color: #000000;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #teamsCandidatesVBox .table-view {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #ffffff;
@@ -155,6 +172,7 @@
     -fx-border-width: 1px 1px 1px 1px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #teamsCandidatesVBox .table-column , .filler {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #dcdcdc;

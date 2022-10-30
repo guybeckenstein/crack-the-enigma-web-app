@@ -1,6 +1,6 @@
 package impl;
 
-import engine.enigmaEngine.exceptions.InvalidPlugBoardException;
+import jar.enigmaEngine.exceptions.InvalidPlugBoardException;
 import javafx.util.Pair;
 
 import java.util.*;

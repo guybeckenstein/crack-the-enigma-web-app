@@ -12,6 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
+<!--suppress ALL -->
 <HBox fx:id="headerHBox" alignment="TOP_CENTER" maxHeight="100.0" minHeight="20.0" prefHeight="100.0" prefWidth="900.0" spacing="10.0" styleClass="pane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersUBoat.HeaderController">
    <children>
       <Button id="loadXMLButton" fx:id="loadButton" alignment="CENTER" contentDisplay="TOP" minHeight="20.0" minWidth="10.0" mnemonicParsing="false" onAction="#loadXML" prefHeight="64.0" prefWidth="110.0" text="Load XML" textFill="WHITE" HBox.hgrow="NEVER">

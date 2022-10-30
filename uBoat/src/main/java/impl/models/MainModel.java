@@ -1,16 +1,16 @@
 package impl.models;
 
-import engine.dto.EngineDTO;
-import engine.dto.XmlDTO;
-import engine.dto.XmlToServletDTO;
-import engine.enigmaEngine.InitializeEnigmaEngineComponents;
-import engine.enigmaEngine.exceptions.*;
-import engine.enigmaEngine.interfaces.EnigmaEngine;
-import engine.enigmaEngine.interfaces.Reflector;
 import historyAndStatistics.MachineCodeData;
 import historyAndStatistics.MachineHistoryAndStatistics;
 import impl.CodeGeneratorModel;
 import interfaces.Input;
+import jar.dto.EngineDTO;
+import jar.dto.XmlDTO;
+import jar.dto.XmlToServletDTO;
+import jar.enigmaEngine.InitializeEnigmaEngineComponents;
+import jar.enigmaEngine.exceptions.*;
+import jar.enigmaEngine.impl.EnigmaEngineImpl;
+import jar.enigmaEngine.interfaces.*;
 import javafx.util.Pair;
 
 import javax.xml.bind.JAXBException;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class MainModel implements Input {
-    private EnigmaEngine engine;
+    private EnigmaEngineImpl engine;
     private XmlDTO xmlDTO;
     private XmlToServletDTO xmlToServletDTO;
     private final MachineHistoryAndStatistics machineHistoryAndStatistics;
@@ -42,18 +42,12 @@ public class MainModel implements Input {
     public XmlToServletDTO getXmlToServletDTO() { return xmlToServletDTO; }
 
     @Override
-    public int getMessageCounter() {
-        EngineDTO DTO = engine.getEngineDTO();
-        return DTO.getMessagesSentCounter();
-    }
-
-    @Override
     public MachineHistoryAndStatistics getMachineHistoryStates() {
         return machineHistoryAndStatistics;
     }
 
     @Override
-    public EnigmaEngine getEngine() {
+    public EnigmaEngineImpl getEngine() {
         return this.engine;
     }
 
@@ -207,13 +201,6 @@ public class MainModel implements Input {
             return;
         }
         this.engine.reset();
-
-        System.out.println("Machine successfully reset.");
-    }
-
-    @Override
-    public String getMachineStatisticsAndHistory() {
-        return this.machineHistoryAndStatistics.toString();
     }
 
     @Override

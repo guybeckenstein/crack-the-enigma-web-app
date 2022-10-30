@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -11,6 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!--suppress ALL -->
 
 <ScrollPane cache="true" fitToHeight="true" fitToWidth="true" prefHeight="500.0" prefWidth="900.0" stylesheets="@contestStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersAgent.ContestController">
    <content>
@@ -20,7 +24,8 @@
             <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="353.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="244.0" prefHeight="244.0" vgrow="NEVER" />
+            <RowConstraints minHeight="117.0" prefHeight="117.0" vgrow="NEVER" />
+            <RowConstraints minHeight="117.0" prefHeight="117.0" vgrow="NEVER" />
             <RowConstraints minHeight="244.0" prefHeight="244.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
@@ -40,11 +45,6 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <Label styleClass="header-label" text="Current Task" wrapText="true">
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin></Label>
-                  <TextField id="currentTaskConfiguration" fx:id="taskStartingConfigurationTextField" editable="false" maxWidth="400.0" prefHeight="35.0" prefWidth="400.0" promptText="Task starting configuration..." VBox.vgrow="NEVER" />
                </children>
                <GridPane.margin>
                   <Insets />
@@ -53,13 +53,22 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
-            <VBox id="agentProgressAndStatusVBox" prefHeight="200.0" prefWidth="100.0" spacing="6.0" GridPane.rowIndex="1">
+            <VBox id="contestAndTeamDataVBox" spacing="6.0" GridPane.rowIndex="1">
+               <children>
+                  <Label styleClass="header-label" text="Current Task" wrapText="true" />
+                  <TextField id="currentTaskConfiguration" fx:id="taskStartingConfigurationTextField" editable="false" maxWidth="400.0" prefHeight="35.0" prefWidth="400.0" promptText="Task starting configuration..." />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+            <VBox id="agentProgressAndStatusVBox" prefHeight="200.0" prefWidth="100.0" spacing="6.0" GridPane.rowIndex="2">
                <children>
                   <Label styleClass="header-label" text="Agent Progress &amp; Status" wrapText="true" />
                   <HBox prefWidth="200.0" spacing="3.0" styleClass="dm-progress-hbox" VBox.vgrow="NEVER">
                      <children>
-                        <Label text="Tasks Withdrew:" wrapText="true" HBox.hgrow="NEVER" />
-                        <Label fx:id="tasksWithdrewLabel" text="0" wrapText="true" HBox.hgrow="NEVER" />
+                        <Label text="Tasks Withdraw:" wrapText="true" HBox.hgrow="NEVER" />
+                        <Label fx:id="tasksWithdrawLabel" text="0" wrapText="true" HBox.hgrow="NEVER" />
                      </children>
                      <VBox.margin>
                         <Insets top="20.0" />
@@ -88,7 +97,27 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
-            <VBox id="agentCandidatesVBox" prefHeight="200.0" prefWidth="100.0" spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <VBox id="contestAndTeamDataVBox" alignment="CENTER" spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <Button id="logoutButton" defaultButton="true" mnemonicParsing="false" onAction="#logoutAction" prefHeight="45.0" prefWidth="136.0" text="Logout" textAlignment="CENTER" textFill="#fafafa" wrapText="true">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Arial Bold" size="24.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="errorLabel" text="ERROR: 404..." wrapText="true">
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox id="agentCandidatesVBox" prefHeight="200.0" prefWidth="100.0" spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
                   <Label styleClass="header-label" text="Agent's Candidates" wrapText="true" />
                   <HBox id="encryptedMessageHBox" alignment="CENTER_LEFT" spacing="6.0" VBox.vgrow="NEVER">

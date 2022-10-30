@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<!--suppress ALL -->
 <ScrollPane cache="true" fitToHeight="true" fitToWidth="true" prefHeight="500.0" prefWidth="900.0" stylesheets="@loginStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersAllies.LoginController">
    <opaqueInsets>
       <Insets />
@@ -31,7 +32,7 @@
             </HBox>
             <HBox id="machineStateHBox" alignment="TOP_CENTER" prefHeight="300.0" prefWidth="200.0" spacing="30.0" VBox.vgrow="SOMETIMES">
                <children>
-                  <Button id="login" mnemonicParsing="false" onAction="#loginAction" prefHeight="60.0" prefWidth="180.0" text="Login" textAlignment="CENTER" wrapText="true" />
+                  <Button id="login" defaultButton="true" mnemonicParsing="false" onAction="#loginAction" prefHeight="60.0" prefWidth="180.0" text="Login" textAlignment="CENTER" wrapText="true" />
                   <Button id="quit" mnemonicParsing="false" onAction="#quitAction" prefHeight="60.0" prefWidth="180.0" text="Quit" textAlignment="CENTER" wrapText="true" />
                </children>
                <VBox.margin>

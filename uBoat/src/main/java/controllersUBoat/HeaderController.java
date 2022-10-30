@@ -1,8 +1,8 @@
 package controllersUBoat;
 
 import com.google.gson.Gson;
-import engine.enigmaEngine.exceptions.*;
-import engine.enigmaEngine.interfaces.Reflector;
+import jar.enigmaEngine.exceptions.*;
+import jar.enigmaEngine.interfaces.Reflector;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static web.http.Configuration.BASE_URL;
-import static web.http.Configuration.HTTP_CLIENT;
+import static http.Base.BASE_URL;
+import static http.Base.HTTP_CLIENT;
 
 public class HeaderController {
     // Main
@@ -45,6 +45,7 @@ public class HeaderController {
     // Username
     @FXML private Label usernameHeaderLabel;
     private String username;
+    private String filePath;
 
     public HeaderController() {
         currXMLFilePath = "";
@@ -64,12 +65,26 @@ public class HeaderController {
         styleChoiceBox.getSelectionModel().selectedIndexProperty().addListener((observableValue, number, number2) -> mainController.updateStylesheet(number2));
 
         usernameHeaderLabel.setText("Hello " + username + " - UBoat User");
+        loadButton.setMouseTransparent(true);
     }
 
     /** Code when moving to contest screen **/
-    public void changeToContestScreen() {
+    public void switchToContestScreen() {
         contestButton.getStyleClass().add("chosen-button");
         machineButton.getStyleClass().remove("chosen-button");
+    }
+
+    /** Code when moving to log in screen **/
+    public void switchToLoginScreen() {
+        // Reset header details
+        xmlFilePathTextField.setText("");
+        currXMLFilePath = "";
+        username = "Guest";
+        usernameHeaderLabel.setText("Hello " + username + " - UBoat User");
+        loadButton.setMouseTransparent(true);
+        // Reset header style
+        machineButton.getStyleClass().add("chosen-button");
+        contestButton.getStyleClass().remove("chosen-button");
     }
 
     @FXML
@@ -80,7 +95,7 @@ public class HeaderController {
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
 
             File newXMLFile = fc.showOpenDialog(null);
-            String filePath = newXMLFile.getAbsolutePath();
+            filePath = newXMLFile.getAbsolutePath();
             if (filePath.equals(currXMLFilePath)) {
                 throw new FileAlreadyExistsException("File given is already defined as the Enigma machine.");
             } else if (!filePath.equals("")) {
@@ -88,26 +103,10 @@ public class HeaderController {
                 try {
                     AppController.getModelMain().createMachineFromXMLFile(filePath);
 
-                    if (!uploadFileToServer()) {
-                        throw new RuntimeException("ERROR: server did not load the file!");
-                    }
-
-                    xmlFilePathTextField.setText(filePath);
-                    currXMLFilePath = filePath;
-
-                    // Update reflector choice box options
-                    List<Reflector.ReflectorID> unsortedReflectors = AppController.getModelMain().getXmlDTO().getReflectorsFromXML()
-                            .stream().map(Reflector.ReflectorID::valueOf).sorted().collect(Collectors.toList());
-                    mainController.updateMachineScreen(
-                            unsortedReflectors.stream().map(String::valueOf).collect(Collectors.toList()),
-                            Integer.toString(AppController.getModelMain().getXmlDTO().getRotorsFromXML().size()),
-                            Integer.toString(AppController.getModelMain().getXmlDTO().getReflectorsFromXML().size())
-                    );
-
-                    mainController.initializeMachineStates("NaN");
-                    mainController.updateDictionary();
+                    uploadFileToServer();
                 } catch (InvalidMachineException | JAXBException | InvalidRotorException | IOException
-                         | InvalidABCException | InvalidReflectorException | InvalidDecipherException | InvalidBattlefieldException e) {
+                         | InvalidABCException | InvalidReflectorException | InvalidDecipherException |
+                         InvalidBattlefieldException e) {
                     loadXMLErrorLabel.setText(e.getLocalizedMessage());
                     mainController.reset();
                     mainController.initializeMachineStates("NaN");
@@ -123,15 +122,13 @@ public class HeaderController {
 
     /** Ex3 **/
     @SuppressWarnings("SpellCheckingInspection")
-    private boolean uploadFileToServer() {
-        final boolean[] addXml = {true}, isAnswer = {false};
-
+    private void uploadFileToServer() {
+        // Get DTO body parameter
         Gson gson = new Gson();
         String xmlDTO = gson.toJson(AppController.getModelMain().getXmlToServletDTO());
         xmlDTO = xmlDTO.replace("\\u0027", "'");
 
         RequestBody body = new FormBody.Builder() // Create request body
-                .add("title", AppController.getModelMain().getXmlToServletDTO().getBattlefieldTitle())
                 .add("username", username)
                 .add("xml", xmlDTO)
                 .build();
@@ -140,37 +137,42 @@ public class HeaderController {
                 .post(body)
                 .build();
         Call call = HTTP_CLIENT.newCall(request); // Create a Call object
+
         call.enqueue(new Callback() { // Execute a call (Asynchronous)
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() -> {
-                    loadXMLErrorLabel.setText("ERROR: failed to upload XML file!");
-                    isAnswer[0] = true;
-                    addXml[0] = false;
-                });
+                Platform.runLater(() -> loadXMLErrorLabel.setText("ERROR: failed to upload XML file!"));
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try (ResponseBody ignoredResponseBody = response.body()) {
                     if (response.isSuccessful()) {
-                        System.out.println("Machine XML file successfully loaded.");
-                        Platform.runLater(() -> {
-                            loadXMLErrorLabel.setText("Machine XML file successfully loaded.");
-                            mainController.getHeaderComponent().setMouseTransparent(false);
-                            isAnswer[0] = true;
-                        });
+                        System.out.println("Machine XML file successfully loaded."); // log
+                        Platform.runLater(() -> successfullyAddedXmlFileConfiguration());
                     }
                 }
             }
         });
-
-        while (!isAnswer[0]) {
-            System.out.println();
-        }
-        return addXml[0];
     }
-    public void updateLabelTextsToEmpty() {
+
+    private void successfullyAddedXmlFileConfiguration() {
+        xmlFilePathTextField.setText(filePath);
+        currXMLFilePath = filePath;
+
+        // Update reflector choice box options
+        List<Reflector.ReflectorID> unsortedReflectors = AppController.getModelMain().getXmlDTO().getReflectorsFromXML()
+                .stream().map(Reflector.ReflectorID::valueOf).sorted().collect(Collectors.toList());
+        mainController.updateMachineScreen(
+                unsortedReflectors.stream().map(String::valueOf).collect(Collectors.toList()),
+                Integer.toString(AppController.getModelMain().getXmlDTO().getRotorsFromXML().size()),
+                Integer.toString(AppController.getModelMain().getXmlDTO().getReflectorsFromXML().size())
+        );
+
+        mainController.initializeMachineStates("NaN");
+        mainController.updateDictionary();
+    }
+    public void emptyLabelText() {
         loadXMLErrorLabel.setText("");
     }
 
@@ -185,12 +187,16 @@ public class HeaderController {
         }
     }
 
-    public void enableScreen() {
-        headerHBox.setDisable(false);
+    public void setLoadButtonMouseTransparency(boolean bool) {
+        loadButton.setMouseTransparent(bool);
     }
 
     public void updateUsername(String username) {
         this.username = username;
         usernameHeaderLabel.setText("Hello " + username + " - UBoat User");
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

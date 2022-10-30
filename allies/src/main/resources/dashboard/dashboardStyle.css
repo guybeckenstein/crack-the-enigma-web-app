@@ -16,6 +16,7 @@
     -fx-font-style: Italic;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #teamAgentsData .table-view {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #ffffff;
@@ -23,6 +24,7 @@
     -fx-border-width: 1px 1px 1px 1px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #teamAgentsData .table-column , .filler {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #dcdcdc;
@@ -51,6 +53,7 @@
     -fx-font-style: Italic;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #contestDataVBox .table-view {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #ffffff;
@@ -58,6 +61,7 @@
     -fx-border-width: 1px 1px 1px 1px;
 }
 
+/*noinspection ALL,CssUnusedSymbol*/
 #mainGridPane #contestDataVBox .table-column , .filler {
     -fx-table-cell-border-color: transparent;
     -fx-background-color: #dcdcdc;

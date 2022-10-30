@@ -4,18 +4,23 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
+import timerTasks.login.AvailableTeamsTimerTask;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static web.http.Configuration.BASE_URL;
-import static web.http.Configuration.HTTP_CLIENT;
+import static http.Base.BASE_URL;
+import static http.Base.HTTP_CLIENT;
 
 public class LoginController {
 
@@ -24,16 +29,25 @@ public class LoginController {
     // Username section
     @FXML private TextField usernameTextField;
     private final StringProperty usernameProperty;
-    // Choices section
-    @FXML private ChoiceBox<String> alliesTeamChoiceBox;
-    @FXML private ChoiceBox<Integer> totalThreadsChoiceBox;
+    // Choices section - available allies teams
+    @FXML private ComboBox<String> alliesTeamComboBox;
+    private Timer availableTeamsTimer;
+    // Choices section - other
+    @FXML private ComboBox<Integer> totalThreadsComboBox;
     @FXML private Slider tasksWithdrawalSizeSlider;
+    @FXML private ComboBox<Integer> tasksWithdrawalSizeComboBox;
     // Error section
     @FXML private Label errorMessageLabel;
     private final StringProperty errorMessageProperty;
 
     public LoginController() {
+        // Username section
         usernameProperty = new SimpleStringProperty("");
+        // Choices section - available allies teams
+        availableTeamsTimer = new Timer(true);
+        AvailableTeamsTimerTask availableTeamsTimerTask = new AvailableTeamsTimerTask(this); // Extends TimerTask
+        availableTeamsTimer.scheduleAtFixedRate(availableTeamsTimerTask, 0, 500);
+        // Choices section - other
         errorMessageProperty = new SimpleStringProperty("Crack The Enigma - Exercise 3");
     }
 
@@ -41,43 +55,60 @@ public class LoginController {
     private void initialize() {
         usernameProperty.bind(usernameTextField.textProperty());
         errorMessageLabel.textProperty().bind(errorMessageProperty);
-        // Allies' teams (dynamic - update all, all the time)
-        updateExistingAlliesTeam();
+        // Allies' teams (dynamic - update all, all the time) - 'updateExistingAlliesTeams(Set<String> currentTeams)'
+
         // Total threads choice box
-        totalThreadsChoiceBox.getItems().addAll(1, 2, 3, 4);
-        totalThreadsChoiceBox.setValue(1);
+        totalThreadsComboBox.getItems().addAll(1, 2, 3, 4);
         // Slider - accepts only integers (not rational numbers)
         tasksWithdrawalSizeSlider.valueProperty().addListener((obs, oldVal, newVal) -> tasksWithdrawalSizeSlider.setValue(newVal.intValue()));
+        // Choice box - values from 1 to 1_000
+        tasksWithdrawalSizeComboBox.getItems().addAll(IntStream.range(1, 1_000 + 1).boxed().collect(Collectors.toList()));
+        tasksWithdrawalSizeComboBox.setValue(1);
+        // Bind choice box and slider bidirectional
+        tasksWithdrawalSizeSlider.valueProperty().addListener(
+                (options, oldValue, newValue) -> tasksWithdrawalSizeComboBox.setValue(newValue.intValue()));
     }
 
-    private void updateExistingAlliesTeam() {
-        // TODO: add allies team from server (those who are already registered)
-        alliesTeamChoiceBox.getItems().addAll("None");
-        alliesTeamChoiceBox.setValue("None");
+    public void updateExistingAlliesTeams(List<String> currentTeams) {
+        String priorSelectedValue = alliesTeamComboBox.getValue();
+        alliesTeamComboBox.getItems().clear();
+        alliesTeamComboBox.getItems().setAll(currentTeams);
+        alliesTeamComboBox.setValue(priorSelectedValue);
     }
 
     @FXML
-    @SuppressWarnings("SpellCheckingInspection")
     void loginAction() {
         if (usernameProperty.get().isEmpty()) {
             errorMessageProperty.set("ERROR: No username has been inserted!");
-        } else if (alliesTeamChoiceBox.getValue().equals("None")) {
+        } else if (alliesTeamComboBox.getValue() == null) {
             errorMessageProperty.set("ERROR: You must choose allies team!");
+        } else if (totalThreadsComboBox.getValue() == null) {
+            errorMessageProperty.set("ERROR: You must choose amount of available threads!");
         } else {
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create("{\n\t\"first_param\":\"xxxxxx\"}", mediaType);
+            String RESOURCE = "/agent/login";
+            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(BASE_URL + RESOURCE)).newBuilder();
+            urlBuilder.addQueryParameter("username", usernameProperty.get()); // Username value
+            urlBuilder.addQueryParameter("type", "Agent"); // Username type
+            urlBuilder.addQueryParameter("team", alliesTeamComboBox.getValue()); // Chosen allies team
+            urlBuilder.addQueryParameter("threads", totalThreadsComboBox.getValue().toString()); // Total threads
+            urlBuilder.addQueryParameter("tasks", String.valueOf(tasksWithdrawalSizeComboBox.getValue())); // Total threads
+            String finalUrl = urlBuilder.build().toString();
+
+            MediaType mediaType = MediaType.parse("text/plain");
+            RequestBody body = RequestBody.create("", mediaType);
+
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/agent/username?username=" + usernameProperty.get())
-                    .put(body)
-                    .addHeader("Content-Type", "application/json")
+                    .url(finalUrl)
+                    .method("PUT", body)
                     .build();
+
             Call call = HTTP_CLIENT.newCall(request); // Create a Call object
             call.enqueue(new Callback() { // Execute a call (Asynchronous)
 
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     Platform.runLater(() ->
-                            errorMessageProperty.set("ERROR: " + e.getLocalizedMessage())
+                            errorMessageProperty.set(e.getLocalizedMessage())
                     );
                 }
 
@@ -91,8 +122,15 @@ public class LoginController {
                             );
                         } else {
                             Platform.runLater(() -> {
-                                mainController.updateAgentUsername(usernameProperty.get()); // TODO: add relevant fields to Agents' DM / thread pool / whatever
-                                mainController.switchToContestScreen();
+                                try {
+                                    availableTeamsTimer.cancel(); // Does not update the ComboBox anymore
+                                    Thread.sleep(100);
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                mainController.updateAgentUsername(usernameProperty.get());
+                                mainController.switchToContestScreen(alliesTeamComboBox.getValue(), totalThreadsComboBox.getValue(),
+                                        tasksWithdrawalSizeComboBox.getValue());
                             });
                         }
                     }
@@ -103,7 +141,6 @@ public class LoginController {
 
     @FXML
     void quitAction() {
-        // TODO: respond to quit
         Platform.exit();
     }
 
@@ -111,4 +148,17 @@ public class LoginController {
         this.mainController = mainController;
     }
 
+    public void reset() {
+        // Choices section - available allies teams
+        availableTeamsTimer = new Timer(true);
+        AvailableTeamsTimerTask availableTeamsTimerTask = new AvailableTeamsTimerTask(this); // Extends TimerTask
+        availableTeamsTimer.scheduleAtFixedRate(availableTeamsTimerTask, 0, 500);
+        // Reset data
+        usernameTextField.setText("");
+        errorMessageProperty.set("Crack The Enigma - Exercise 3");
+        alliesTeamComboBox.getSelectionModel().clearSelection(); // Allies' teams
+        totalThreadsComboBox.getSelectionModel().clearSelection(); // Total threads
+        tasksWithdrawalSizeSlider.setValue(1.0); // Tasks withdrawal
+        tasksWithdrawalSizeComboBox.setValue(1); // Tasks withdrawal
+    }
 }

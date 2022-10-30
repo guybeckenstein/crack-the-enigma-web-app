@@ -12,6 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!--suppress ALL -->
 
 <ScrollPane cache="true" fitToHeight="true" fitToWidth="true" prefHeight="500.0" prefWidth="900.0" stylesheets="@contestStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersAllies.ContestController">
    <content>
@@ -44,16 +47,24 @@
                      </columnResizePolicy>
                   </TableView>
                   <Label styleClass="header-label" text="Enter Task Size:" wrapText="true" />
-                  <TextField fx:id="taskSizeTextField" maxWidth="250.0" prefHeight="25.0" prefWidth="250.0" promptText="Pick Your Size..." VBox.vgrow="NEVER" />
-                  <HBox alignment="BOTTOM_LEFT" spacing="10.0">
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
                      <VBox.margin>
-                        <Insets left="20.0" top="10.0" />
+                        <Insets top="10.0" />
                      </VBox.margin>
                      <children>
-                        <Button fx:id="readyButton" mnemonicParsing="false" onAction="#readyAction" text="Ready" wrapText="true" />
-                        <Label fx:id="errorMessageLabel" text="ERROR: 404..." />
+                        <TextField fx:id="taskSizeTextField" maxWidth="250.0" prefHeight="25.0" prefWidth="250.0" promptText="Pick Your Size..." />
+                        <Button fx:id="readyButton" defaultButton="true" mnemonicParsing="false" onAction="#readyAction" text="Ready" wrapText="true" />
+                        <Button id="logoutButton" fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutAction" text="Logout" wrapText="true" />
                      </children>
                   </HBox>
+                  <Label fx:id="errorMessageLabel" text="ERROR: 404..." wrapText="true">
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
                </children>
                <GridPane.margin>
                   <Insets />
@@ -97,24 +108,28 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <HBox prefWidth="200.0" spacing="3.0" styleClass="dm-progress-hbox" VBox.vgrow="NEVER">
+                  <VBox spacing="6.0">
                      <children>
-                        <Label text="Tasks Available:" wrapText="true" HBox.hgrow="NEVER" />
-                        <Label fx:id="tasksAvailableLabel" text="0" wrapText="true" HBox.hgrow="NEVER" />
+                        <HBox prefWidth="200.0" spacing="3.0" styleClass="dm-progress-hbox">
+                           <children>
+                              <Label text="Tasks Available:" wrapText="true" HBox.hgrow="NEVER" />
+                              <Label fx:id="tasksAvailableLabel" text="0" wrapText="true" HBox.hgrow="NEVER" />
+                           </children>
+                        </HBox>
+                        <HBox prefWidth="200.0" spacing="3.0" styleClass="dm-progress-hbox">
+                           <children>
+                              <Label text="Tasks Generated:" wrapText="true" HBox.hgrow="NEVER" />
+                              <Label fx:id="tasksGeneratedLabel" text="0" wrapText="true" HBox.hgrow="NEVER" />
+                           </children>
+                        </HBox>
+                        <HBox prefWidth="200.0" spacing="3.0" styleClass="dm-progress-hbox">
+                           <children>
+                              <Label text="Tasks Finished:" wrapText="true" HBox.hgrow="NEVER" />
+                              <Label fx:id="tasksFinishedLabel" text="0" wrapText="true" HBox.hgrow="NEVER" />
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
-                  <HBox prefWidth="200.0" spacing="3.0" styleClass="dm-progress-hbox" VBox.vgrow="NEVER">
-                     <children>
-                        <Label text="Tasks Generated:" wrapText="true" HBox.hgrow="NEVER" />
-                        <Label fx:id="tasksGeneratedLabel" text="0" wrapText="true" HBox.hgrow="NEVER" />
-                     </children>
-                  </HBox>
-                  <HBox prefWidth="200.0" spacing="3.0" styleClass="dm-progress-hbox" VBox.vgrow="NEVER">
-                     <children>
-                        <Label text="Tasks Finished:" wrapText="true" HBox.hgrow="NEVER" />
-                        <Label fx:id="tasksFinishedLabel" text="0" wrapText="true" HBox.hgrow="NEVER" />
-                     </children>
-                  </HBox>
+                  </VBox>
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -132,7 +147,7 @@
                   <TableView fx:id="teamsCandidatesTableView" VBox.vgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="candidateMessageTableColumn" editable="false" minWidth="-1.0" prefWidth="-1.0" sortable="false" text="Message" />
-                        <TableColumn fx:id="candidateUsernameTableColumn" editable="false" minWidth="-1.0" prefWidth="-1.0" sortable="false" text="Username" />
+                        <TableColumn fx:id="candidateUsernameTableColumn" editable="false" minWidth="-1.0" prefWidth="-1.0" sortable="false" text="Agent" />
                         <TableColumn fx:id="candidateConfigurationTableColumn" editable="false" minWidth="-1.0" prefWidth="-1.0" sortable="false" text="Configuration" />
                      </columns>
                      <columnResizePolicy>
