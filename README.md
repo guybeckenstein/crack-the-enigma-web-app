@@ -1,7 +1,7 @@
 # Enigma Machine - Web application
 ## A web application with three types of clients. UBoat, Allies, Agent
 
-### It simulates a competition to find the encrypted string of the Enigma machine, in which the winners are those who find the original cipher in the shortest time.
+## It simulates a competition to find the encrypted string of the Enigma machine, in which the winners are those who find the original cipher in the shortest time.
 
 ### This is mainly a backend project.
 
