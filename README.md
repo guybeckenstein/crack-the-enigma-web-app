@@ -55,17 +55,18 @@ Familiarity with Spring and Maven frameworks, and Postman for building the API o
 I used Apache Tomcat for web-server environment.
 
 
-
-## Screenshots
-### UBoat
+------
+### Screenshots
+------
+#### UBoat
 ![UBoat chooses config](https://user-images.githubusercontent.com/82370205/198925523-fd81bdd4-4273-45eb-aee2-5fb256a3ea4e.png)
 ![UBoat chooses file](https://user-images.githubusercontent.com/82370205/198925527-71acedb7-3947-4051-9dda-d006a470721b.png)
 ![UBoat presses ready](https://user-images.githubusercontent.com/82370205/198925529-2081b9b6-1551-4451-8965-9c5fb4f6cdec.png)
-
-### Allies
+======
+#### Allies
 ![Allies chooses task size](https://user-images.githubusercontent.com/82370205/198925539-641443d1-03bf-49d9-8e39-8cd70724bad9.png)
 ![Allies picks contest](https://user-images.githubusercontent.com/82370205/198925540-488a8d7a-1f14-4ef2-a2c8-bf38f4233f8d.png)
 ![Allies recieves winner announced message](https://user-images.githubusercontent.com/82370205/198925541-ead0ac12-cfcd-43cd-a4f8-dabf75a15ab1.png)
-
-### Agent
+======
+#### Agent
 ![Agent login screen](https://user-images.githubusercontent.com/82370205/198925546-b25b74f5-0eaa-46d5-b338-ae7bafd61d44.png)
