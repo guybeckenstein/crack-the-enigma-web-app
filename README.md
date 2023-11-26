@@ -1,10 +1,18 @@
-# [Enigma Machine - Web application](https://guybeckenstein.github.io/crack-the-enigma-v2/)
+# [Enigma Machine - Web application](https://guybeckenstein.github.io/crack-the-enigma-v2/) (Screenshots below)
 ## A web application with three types of clients. UBoat, Allies, Agent
 
 ## It simulates a competition to find the encrypted string of the Enigma machine, in which the winners are those who find the original cipher in the shortest time.
 
 ### This is mainly a backend project.
+1. Utilizing a client-server web model and _MVC_ design pattern, using singletons, DTO, etc.
+2. _Maven_ is employed as the project's build automation and management tool, streamlining dependency management and project build processes.
+3. _Tomcat_ is integrated as the servlet container, facilitating the deployment and execution of the Java web application.
+4. It is including _Enigma machine_ implementation, automatic decipher process (using **brute force**), and client-server model. 
+5. The machine is a generic one, not limited to a certain scale. 
+6. Implemented an Enigma machine feature and developed automated deciphering through brute force algorithms (combinations, permutations, etc.), thus 100,0000 decodes can be found within a minute.
+7. Extensively employs multithreading, thread pools, atomic variables, files, collections, OOP principles (interfaces, encapsulation, SOLID, singletons, etc.). Styled within CSS, using JavaFX attributes (Desktop Application, not web – HTML).
 
+### The Entities in the Web Application
 - **General**
 ```bash
 Each client has a personalized login screen, where he chooses a unique username from all types of clients.
@@ -42,18 +50,6 @@ until it finds the original cipher.
 When the Agent finds candidates for decoding, it will send them to the Allies, 
 and when the UBoat indicates that the original cipher has been found, the identity of the winning Allies will be announced.
 ```
-
-
-It is including Enigma machine implementation, automatic decipher process (using brute force), and client-server model. 
-
-The machine is a generic one, not limited to a certain scale. 
-
-The process involved working with multiple threads, files, collections and other OOP concepts and principles (e.g. interfaces, encapsulation, SOLID). 
-
-Familiarity with Spring and Maven frameworks, and Postman for building the API of HTTP application.
-
-I used Apache Tomcat for web-server environment.
-
 
 ------
 ### Screenshots
