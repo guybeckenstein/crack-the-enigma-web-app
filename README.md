@@ -1,4 +1,4 @@
-# [Enigma Machine - Web application](https://guybeckenstein.github.io/crack-the-enigma-v2/) (Screenshots below)
+# [Enigma Machine - Client-Server Desktop Application](https://guybeckenstein.github.io/crack-the-enigma-v2/) (Screenshots below)
 ## A web application with three types of clients. UBoat, Allies, Agent
 
 ## It simulates a competition to find the encrypted string of the Enigma machine, in which the winners are those who find the original cipher in the shortest time.
@@ -10,7 +10,8 @@
 4. It is including _Enigma machine_ implementation, automatic decipher process (using **brute force**), and client-server model. 
 5. The machine is a generic one, not limited to a certain scale. 
 6. Implemented an Enigma machine feature and developed automated deciphering through brute force algorithms (combinations, permutations, etc.), thus 100,0000 decodes can be found within a minute.
-7. Extensively employs multithreading, thread pools, atomic variables, files, collections, OOP principles (interfaces, encapsulation, SOLID, singletons, etc.). Styled within CSS, using JavaFX attributes (Desktop Application, not web – HTML).
+7. Extensively employs multithreading, thread pools, atomic variables, files, collections, OOP principles (interfaces, encapsulation, SOLID, singletons, etc.).
+8. Used _CSS_ for styling, _JavaFX_ for desktop attributes.
 
 ### The Entities in the Web Application
 - **General**
